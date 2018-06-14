@@ -4,14 +4,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
 
     MovieAdapter mAdapter;
     RecyclerView mMovieList;
     List<Movie> mMovie;
+    Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +26,16 @@ public class MainActivity extends AppCompatActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         mMovieList.setLayoutManager(gridLayoutManager);
 
-        mAdapter = new MovieAdapter(this, mMovie);
+        mAdapter = new MovieAdapter(this, mMovie, this);
         mMovieList.setAdapter(mAdapter);
+
+    }
+    //This is where you will create intent to open details about the movie that was clicked
+    @Override
+    public void onMovieItemClick(int clickedItemIndex){
+        String toastMessage = "Item # " + clickedItemIndex + "clicked!";
+        mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
+        mToast.show();
 
     }
 }
