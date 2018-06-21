@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Popular Movies</string>
     <string name="app_title">POPULAR FLIX</string>
+
+    <!--For Menu Items -->
+    <string name="sort_by_popular_item_label">Sort By: Most Popular (Default)</string>
+    <string name="sort_by_highest_rated_item_label">Sort By: Highest Rated</string>
+
 </resources>

@@ -5,17 +5,17 @@ public class Movie {
     //Every Movie object will contain these five elements which will be parsed from JSON
     private String movieTitle;
     private String releaseDate;
-    private String posterImage;
-    private float voteAverage;
+    private String posterImageUrl;
+    private long voteAverage;
     private String synopsis;
 
     public Movie(){
     }
 
-    public Movie(String movieTitle, String releaseDate, String posterImage, float voteAverage, String synopsis) {
+    public Movie(String movieTitle, String releaseDate, String posterImageUrl, long voteAverage, String synopsis) {
         this.movieTitle = movieTitle;
         this.releaseDate = releaseDate;
-        this.posterImage = posterImage;
+        this.posterImageUrl = posterImageUrl;
         this.voteAverage = voteAverage;
         this.synopsis = synopsis;
     }
@@ -36,19 +36,19 @@ public class Movie {
         this.releaseDate = releaseDate;
     }
 
-    public String getPosterImage() {
-        return posterImage;
+    public String getPosterImageUrl() {
+        return posterImageUrl;
     }
 
-    public void setPosterImage(String posterImage) {
-        this.posterImage = posterImage;
+    public void setPosterImageUrl(String posterImage) {
+        this.posterImageUrl = posterImage;
     }
 
-    public float getVoteAverage() {
+    public long getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(float voteAverage) {
+    public void setVoteAverage(long voteAverage) {
         this.voteAverage = voteAverage;
     }
 
