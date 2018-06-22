@@ -44,13 +44,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         return movieViewHolder;
     }
 
+    //Will bind the parsed JSON data to the correct views
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, int position) {
+        //Retrieve movie title from parsed JSON and set title to the correct view
         holder.movieTitleTV.setText(mMovie.get(position).getMovieTitle());
-        //holder.moviePosterIV.setText(mMovie.get(position).getPosterImageUrl());
 
-
-
+        //Retrieve poster image url from parsed JSON and use Picasso library to set image
+        Picasso.get()
+                .load(mMovie.get(position).getPosterImageUrl())
+                .into(holder.moviePosterIV);
     }
 
     @Override
@@ -59,6 +62,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
 
+    //Setting click listener for each RecyclerView item
     public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView movieTitleTV;
         ImageView moviePosterIV;

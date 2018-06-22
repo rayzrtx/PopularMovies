@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.android.popularmovies.utilities.MovieDBJsonUtils;
 import com.example.android.popularmovies.utilities.NetworkQueryUtils;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.URL;
@@ -24,8 +25,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     ArrayList<Movie> mMovie;
     Toast mToast;
     TextView mMovieTitle;
-    TextView mJsonTV;
-    TextView mURLtv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,22 +59,22 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
             String movieDBresults = null;
             try{
-                movieDBresults = NetworkQueryUtils.getResponseFromHttpUrl(searchURL); //JSON string
+                movieDBresults = NetworkQueryUtils.getResponseFromHttpUrl(searchURL); //Retrieving JSON from URL
             }catch (IOException e){
                 e.printStackTrace();
             }
 
-            return movieDBresults; //JSON string
+            return movieDBresults; //JSON string with all of the retrieved JSON data that now needs to be parsed
         }
 
-        //If JSON string is not empty or null, it will print the JSON string on screen
+        //If JSON string is not empty or null, parse JSON string
         @Override
         protected void onPostExecute(String movieJSON) {
             if (movieJSON != null && movieJSON != "") {
                 mMovie = MovieDBJsonUtils.parseMovieJSON(movieJSON); //Will parse JSON data and return a list of movie objects
 
-                //Bind data to recyclerview to populate UI
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 3);
+                //Bind parsed JSON data to recyclerview and use Adapter to populate UI
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
                 mMovieList.setLayoutManager(gridLayoutManager);
                 mAdapter = new MovieAdapter(MainActivity.this, mMovie, MainActivity.this);
                 mMovieList.setAdapter(mAdapter);
