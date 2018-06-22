@@ -42,9 +42,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     }
 
-    //Will return the URL to download Movie DB json info
+    //Will return the URL to download Movie DB json info for most popular movies
     void makeMovieDBSearchQuery(){
-        URL builtURL = NetworkQueryUtils.buildUrl();
+        URL builtURL = NetworkQueryUtils.buildMostPopularUrl();
+        new MoviesDBQueryTask().execute(builtURL);
+    }
+
+    void makeHighestRatedMovieDBSearchQuery(){
+        URL builtURL = NetworkQueryUtils.buildHighestRatedUrl();
         new MoviesDBQueryTask().execute(builtURL);
     }
 
@@ -97,17 +102,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()){
             case R.id.action_sort_item_most_popular:
-                //Insert method to sort by most popular
-                String toastMessage = "Movies will be sorted by most popular";
-                Toast mostPopularToast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
-                mostPopularToast.show();
+
+                //Will return list of most popular movies
+                makeMovieDBSearchQuery();
+
                 return true;
 
             case R.id.action_sort_item_highest_rated:
-                //Insert method to sort by highest rated
-                String highestRatedToastMessage = "Movies will be sorted by highest rated";
-                Toast highestRatedToast = Toast.makeText(this, highestRatedToastMessage, Toast.LENGTH_SHORT);
-                highestRatedToast.show();
+
+                //Will return list of highest rated movies
+                makeHighestRatedMovieDBSearchQuery();
+
                 return true;
         }
         return super.onOptionsItemSelected(item);

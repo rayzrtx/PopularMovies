@@ -12,20 +12,37 @@ import java.util.Scanner;
 public class NetworkQueryUtils {
 
     final static String MOVIE_DB_MOST_POPULAR_URL = "https://api.themoviedb.org/3/movie/popular?api_key=";
+    final static String MOVIE_DB_HIGHEST_RATED_URL = "https://api.themoviedb.org/3/movie/top_rated?api_key=";
     final static String API_KEY = "";  //Please enter your own unique personal API key
 
-    public static URL buildUrl(){
+    //This will build the URL for the most popular movies
+    public static URL buildMostPopularUrl(){
         Uri movieDbQueryUri =
                 Uri.parse(MOVIE_DB_MOST_POPULAR_URL + API_KEY);
 
-        URL url = null;
+        URL mostPopularURL = null;
 
         try {
-            url = new URL(movieDbQueryUri.toString());
+           mostPopularURL  = new URL(movieDbQueryUri.toString());
         }catch (MalformedURLException e){
             e.printStackTrace();
         }
-        return url;
+        return mostPopularURL;
+    }
+
+    //This will build the URL for the highest rated movies
+    public static URL buildHighestRatedUrl(){
+        Uri movieDbQueryUri =
+                Uri.parse(MOVIE_DB_HIGHEST_RATED_URL + API_KEY);
+
+        URL highestRatedURL = null;
+
+        try {
+            highestRatedURL = new URL(movieDbQueryUri.toString());
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        return highestRatedURL;
     }
 
     public static String getResponseFromHttpUrl(URL url) throws IOException {
