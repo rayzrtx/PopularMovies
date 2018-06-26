@@ -1,5 +1,6 @@
 package com.example.android.popularmovies;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -121,9 +122,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     //This is where you will create intent to open details about the movie that was clicked
     @Override
     public void onMovieItemClick(int clickedItemIndex){
-        String toastMessage = "Item # " + clickedItemIndex + " clicked!";
-        mToast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT);
-        mToast.show();
+        Intent movieDetailIntent = new Intent(MainActivity.this, MovieDetailsActivity.class);
+        movieDetailIntent.putExtra(MovieDetailsActivity.EXTRA_POSITION, clickedItemIndex);
+        startActivity(movieDetailIntent);
+
 
     }
 }
