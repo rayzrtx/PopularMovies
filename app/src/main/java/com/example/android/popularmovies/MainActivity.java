@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //This is the recycler view where the list of movie posters will appear
         mMovieList = findViewById(R.id.movies_rv);
@@ -119,11 +121,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         return super.onOptionsItemSelected(item);
     }
 
-    //This is where you will create intent to open details about the movie that was clicked
+    //MovieDetailsActivity will open with details of the movie that is clicked. Movie info is passed through intent.
     @Override
     public void onMovieItemClick(int clickedItemIndex){
         Intent movieDetailIntent = new Intent(MainActivity.this, MovieDetailsActivity.class);
-        movieDetailIntent.putExtra(MovieDetailsActivity.EXTRA_POSITION, clickedItemIndex);
+        movieDetailIntent.putExtra("Movie", mMovie.get(clickedItemIndex));
         startActivity(movieDetailIntent);
 
 

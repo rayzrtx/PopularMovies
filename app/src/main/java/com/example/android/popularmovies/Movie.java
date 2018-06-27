@@ -1,18 +1,22 @@
 package com.example.android.popularmovies;
 
-public class Movie {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+//Parcelable interface will assist in storing and retrieving Movie data info to pass through Intent
+public class Movie implements Parcelable {
 
     //Every Movie object will contain these five elements which will be parsed from JSON
     private String movieTitle;
     private String releaseDate;
     private String posterImageUrl;
-    private long voteAverage;
+    private Double voteAverage;
     private String synopsis;
 
     public Movie(){
     }
 
-    public Movie(String movieTitle, String releaseDate, String posterImageUrl, long voteAverage, String synopsis) {
+    public Movie(String movieTitle, String releaseDate, String posterImageUrl, Double voteAverage, String synopsis) {
         this.movieTitle = movieTitle;
         this.releaseDate = releaseDate;
         this.posterImageUrl = posterImageUrl;
@@ -44,11 +48,11 @@ public class Movie {
         this.posterImageUrl = posterImage;
     }
 
-    public long getVoteAverage() {
+    public Double getVoteAverage() {
         return voteAverage;
     }
 
-    public void setVoteAverage(long voteAverage) {
+    public void setVoteAverage(Double voteAverage) {
         this.voteAverage = voteAverage;
     }
 
@@ -59,4 +63,44 @@ public class Movie {
     public void setSynopsis(String synopsis) {
         this.synopsis = synopsis;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    //write object values to parcel for storage
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(movieTitle);
+        parcel.writeString(releaseDate);
+        parcel.writeString(posterImageUrl);
+        parcel.writeDouble(voteAverage);
+        parcel.writeString(synopsis);
+
+    }
+
+    //constructor that will be collecting values sent to receiving intent
+    public Movie(Parcel parcel){
+        movieTitle = parcel.readString();
+        releaseDate = parcel.readString();
+        posterImageUrl = parcel.readString();
+        voteAverage = parcel.readDouble();
+        synopsis = parcel.readString();
+
+    }
+    //Will bind everything together when un-parceling the parcel and creating the Movie
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>(){
+
+        @Override
+        public Movie createFromParcel(Parcel parcel) {
+            return new Movie(parcel);
+        }
+
+        @Override
+        public Movie[] newArray(int i) {
+            return new Movie[0];
+        }
+    };
+
 }

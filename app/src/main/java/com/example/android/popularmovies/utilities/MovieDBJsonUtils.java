@@ -33,7 +33,7 @@ public class MovieDBJsonUtils {
                 String movieTitle = resultsObject.getString(TITLE_KEY);
                 String moviePosterPath = "http://image.tmdb.org/t/p/w185" + resultsObject.getString(POSTER_PATH_KEY);
                 String movieOverview = resultsObject.getString(OVERVIEW_KEY);
-                long movieVoteAvg = resultsObject.getLong(VOTE_AVG_KEY);
+                Double movieVoteAvg = resultsObject.getDouble(VOTE_AVG_KEY);
                 String movieReleaseDate = resultsObject.getString(RELEASE_DATE_KEY);
 
                 Movie newMovie = new Movie(movieTitle, movieReleaseDate, moviePosterPath, movieVoteAvg, movieOverview);

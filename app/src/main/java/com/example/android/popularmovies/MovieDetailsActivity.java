@@ -1,22 +1,75 @@
 package com.example.android.popularmovies;
 
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
-    public static final String EXTRA_POSITION = "extra_position";
-    private static final int DEFAULT_POSITION = -1;
+    TextView mMovieTitle;
+    TextView mReleaseDate;
+    TextView mRating;
+    TextView mSynopsis;
+    ImageView mMoviePoster;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
+        //Set up button on action bar if not null
+        ActionBar actionBar = this.getSupportActionBar();
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         Intent intent = getIntent();
+        Movie movie = intent.getParcelableExtra("Movie");
 
-        int position = intent.getIntExtra(EXTRA_POSITION, DEFAULT_POSITION);
+        mMovieTitle = findViewById(R.id.details_movie_title_tv);
+        mReleaseDate = findViewById(R.id.details_movie_release_date_tv);
+        mRating = findViewById(R.id.details_movie_vote_avg_tv);
+        mSynopsis = findViewById(R.id.details_movie_synopsis_tv);
+        mMoviePoster = findViewById(R.id.details_movie_poster_iv);
 
+        String movieTitle = movie.getMovieTitle();
+        String movieReleaseDate = movie.getReleaseDate();
+        String movieReleaseYear = movieReleaseDate.substring(0, 4);
+        String movieRating = String.valueOf(movie.getVoteAverage()) + "/10";
+        String movieSynopsis = movie.getSynopsis();
+        String moviePosterURL = movie.getPosterImageUrl();
+
+
+        mMovieTitle.setText(movieTitle);
+        mReleaseDate.setText(movieReleaseYear);
+        mRating.setText(movieRating);
+        mSynopsis.setText(movieSynopsis);
+
+        Picasso.get()
+                .load(moviePosterURL)
+                .into(mMoviePoster);
+
+
+
+    }
+
+    //For implementing Up button functionality
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
