@@ -13,7 +13,7 @@ public class Movie implements Parcelable {
     private Double voteAverage;
     private String synopsis;
 
-    public Movie(){
+    public Movie() {
     }
 
     public Movie(String movieTitle, String releaseDate, String posterImageUrl, Double voteAverage, String synopsis) {
@@ -81,7 +81,7 @@ public class Movie implements Parcelable {
     }
 
     //constructor that will be collecting values sent to receiving intent
-    public Movie(Parcel parcel){
+    public Movie(Parcel parcel) {
         movieTitle = parcel.readString();
         releaseDate = parcel.readString();
         posterImageUrl = parcel.readString();
@@ -89,8 +89,9 @@ public class Movie implements Parcelable {
         synopsis = parcel.readString();
 
     }
+
     //Will bind everything together when un-parceling the parcel and creating the Movie
-    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>(){
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
 
         @Override
         public Movie createFromParcel(Parcel parcel) {

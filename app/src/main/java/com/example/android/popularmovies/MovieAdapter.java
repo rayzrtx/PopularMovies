@@ -20,7 +20,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private ArrayList<Movie> mMovie;
     private final MovieItemClickListener mOnClickListener;
 
-    public interface MovieItemClickListener{
+    public interface MovieItemClickListener {
         void onMovieItemClick(int clickedItemIndex);
     }
 
@@ -63,7 +63,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
 
     //Setting click listener for each RecyclerView item
-    public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView movieTitleTV;
         ImageView moviePosterIV;
 

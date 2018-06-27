@@ -16,22 +16,22 @@ public class NetworkQueryUtils {
     final static String API_KEY = "";  //Please enter your own unique personal API key
 
     //This will build the URL for the most popular movies
-    public static URL buildMostPopularUrl(){
+    public static URL buildMostPopularUrl() {
         Uri movieDbQueryUri =
                 Uri.parse(MOVIE_DB_MOST_POPULAR_URL + API_KEY);
 
         URL mostPopularURL = null;
 
         try {
-           mostPopularURL  = new URL(movieDbQueryUri.toString());
-        }catch (MalformedURLException e){
+            mostPopularURL = new URL(movieDbQueryUri.toString());
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         return mostPopularURL;
     }
 
     //This will build the URL for the highest rated movies
-    public static URL buildHighestRatedUrl(){
+    public static URL buildHighestRatedUrl() {
         Uri movieDbQueryUri =
                 Uri.parse(MOVIE_DB_HIGHEST_RATED_URL + API_KEY);
 
@@ -39,7 +39,7 @@ public class NetworkQueryUtils {
 
         try {
             highestRatedURL = new URL(movieDbQueryUri.toString());
-        }catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         return highestRatedURL;

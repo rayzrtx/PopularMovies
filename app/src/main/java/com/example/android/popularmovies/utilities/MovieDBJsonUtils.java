@@ -19,7 +19,7 @@ public class MovieDBJsonUtils {
     public static final String VOTE_AVG_KEY = "vote_average";
     public static final String RELEASE_DATE_KEY = "release_date";
 
-    public static ArrayList<Movie> parseMovieJSON(String movieJSON){
+    public static ArrayList<Movie> parseMovieJSON(String movieJSON) {
 
         ArrayList<Movie> movies = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class MovieDBJsonUtils {
                 movies.add(newMovie);
             }
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             Log.e("JSON Utils", "Problem parsing the JSON results", e);
             return null;
         }

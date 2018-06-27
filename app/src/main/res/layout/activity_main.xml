@@ -1,24 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/movies_rv"
-        android:background="@android:color/black"/>
+        android:orientation="vertical"
+        tools:context=".MainActivity">
 
-    <!-- Loading indicator is only shown before the first load -->
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/loading_spinner"
-        style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_gravity="center"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/movies_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/black" />
+
+            <!-- Loading indicator is only shown before the first load -->
+            <ProgressBar
+                android:id="@+id/loading_spinner"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:visibility="invisible" />
+
+            <!-- Only visible if there is an error loading data -->
+            <TextView
+                android:id="@+id/error_message_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="16dp"
+                android:text="@string/error"
+                android:textSize="22sp"
+                android:visibility="invisible" />
+
+            <!-- Show message if there is no internet connection -->
+            <TextView
+                android:id="@+id/no_internet_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/no_internet"
+                android:textSize="22sp"
+                android:visibility="invisible" />
+
+        </FrameLayout>
+    </LinearLayout>
+</FrameLayout>

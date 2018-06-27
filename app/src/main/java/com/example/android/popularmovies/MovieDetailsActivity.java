@@ -28,7 +28,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         //Set up button on action bar if not null
         ActionBar actionBar = this.getSupportActionBar();
-        if (actionBar != null){
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
@@ -59,7 +59,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 .into(mMoviePoster);
 
 
-
     }
 
     //For implementing Up button functionality
@@ -67,7 +66,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        if (id == android.R.id.home){
+        if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
         }
         return super.onOptionsItemSelected(item);

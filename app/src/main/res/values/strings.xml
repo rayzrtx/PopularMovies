@@ -6,4 +6,7 @@
     <string name="sort_by_popular_item_label">Most Popular (Default)</string>
     <string name="sort_by_highest_rated_item_label">Highest Rated</string>
 
+    <string name="error">An error has occurred. Unable to load results.</string>
+    <string name="no_internet">No Internet Connection.</string>
+
 </resources>

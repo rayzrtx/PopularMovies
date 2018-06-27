@@ -1,6 +1,9 @@
 package com.example.android.popularmovies;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +12,8 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,39 +30,96 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     MovieAdapter mAdapter;
     RecyclerView mMovieList;
     ArrayList<Movie> mMovie;
-    Toast mToast;
     TextView mMovieTitle;
+    TextView mErrorMessageTextView;
+    ProgressBar mProgressBar;
+    TextView mNoInternetTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mErrorMessageTextView = findViewById(R.id.error_message_tv);
+        mProgressBar = findViewById(R.id.loading_spinner);
+        mNoInternetTextView = findViewById(R.id.no_internet_tv);
+
 
         //This is the recycler view where the list of movie posters will appear
         mMovieList = findViewById(R.id.movies_rv);
+        //Recyclerview is invisible until data is retreived
+        mMovieList.setVisibility(View.INVISIBLE);
 
         mMovie = new ArrayList<>();
 
         mMovieTitle = findViewById(R.id.movie_title_tv);
 
-        makeMovieDBSearchQuery();
+        //If there is an internet connection, run query. Else show No Internet message.
+        if (isConnected(MainActivity.this)) {
+
+            makeMovieDBSearchQuery();
+        } else
+            showNoInternetMessage();
 
     }
 
     //Will return the URL to download Movie DB json info for most popular movies
-    void makeMovieDBSearchQuery(){
+    void makeMovieDBSearchQuery() {
         URL builtURL = NetworkQueryUtils.buildMostPopularUrl();
         new MoviesDBQueryTask().execute(builtURL);
     }
 
-    void makeHighestRatedMovieDBSearchQuery(){
+    void makeHighestRatedMovieDBSearchQuery() {
         URL builtURL = NetworkQueryUtils.buildHighestRatedUrl();
         new MoviesDBQueryTask().execute(builtURL);
     }
 
+    private void showMovieDataView() {
+        mMovieList.setVisibility(View.VISIBLE);
+        mErrorMessageTextView.setVisibility(View.INVISIBLE);
+        mNoInternetTextView.setVisibility(View.INVISIBLE);
+    }
+
+    private void showErrorMessage() {
+        mMovieList.setVisibility(View.INVISIBLE);
+        mErrorMessageTextView.setVisibility(View.VISIBLE);
+        mNoInternetTextView.setVisibility(View.INVISIBLE);
+    }
+
+    //Checking if device is connected to the internet
+    public boolean isConnected(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        //checking if connected via mobile network or wifi
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
+            android.net.NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            android.net.NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+            if ((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) {
+                return true;
+            } else
+                return false;
+
+        } else
+            return false;
+    }
+
+    private void showNoInternetMessage() {
+        mMovieList.setVisibility(View.INVISIBLE);
+        mErrorMessageTextView.setVisibility(View.INVISIBLE);
+        mNoInternetTextView.setVisibility(View.VISIBLE);
+    }
+
+
     //AsyncTask to perform network request in background thread
-    public class MoviesDBQueryTask extends AsyncTask<URL, Void, String>{
+    public class MoviesDBQueryTask extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
 
 
         //Will connect to URL and return JSON string info
@@ -66,9 +128,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             URL searchURL = urls[0];
 
             String movieDBresults = null;
-            try{
+            try {
                 movieDBresults = NetworkQueryUtils.getResponseFromHttpUrl(searchURL); //Retrieving JSON from URL
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -78,7 +140,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         //If JSON string is not empty or null, parse JSON string
         @Override
         protected void onPostExecute(String movieJSON) {
+            mProgressBar.setVisibility(View.INVISIBLE);
             if (movieJSON != null && movieJSON != "") {
+                //Set recyclerview to visible
+                showMovieDataView();
                 mMovie = MovieDBJsonUtils.parseMovieJSON(movieJSON); //Will parse JSON data and return a list of movie objects
 
                 //Bind parsed JSON data to recyclerview and use Adapter to populate UI
@@ -87,6 +152,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 mAdapter = new MovieAdapter(MainActivity.this, mMovie, MainActivity.this);
                 mMovieList.setAdapter(mAdapter);
 
+            } else {
+                showErrorMessage();
             }
         }
     }
@@ -103,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_sort_item_most_popular:
 
                 //Will return list of most popular movies
@@ -123,11 +190,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     //MovieDetailsActivity will open with details of the movie that is clicked. Movie info is passed through intent.
     @Override
-    public void onMovieItemClick(int clickedItemIndex){
+    public void onMovieItemClick(int clickedItemIndex) {
         Intent movieDetailIntent = new Intent(MainActivity.this, MovieDetailsActivity.class);
         movieDetailIntent.putExtra("Movie", mMovie.get(clickedItemIndex));
         startActivity(movieDetailIntent);
-
-
     }
 }
