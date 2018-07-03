@@ -78,24 +78,30 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mMovieList.setVisibility(View.VISIBLE);
         mErrorMessageTextView.setVisibility(View.INVISIBLE);
         mNoInternetTextView.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
     }
 
     private void showErrorMessage() {
         mMovieList.setVisibility(View.INVISIBLE);
         mErrorMessageTextView.setVisibility(View.VISIBLE);
         mNoInternetTextView.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
     }
 
     //Checking if device is connected to the internet
     public boolean isConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo networkInfo = null;
+        if (connectivityManager != null) {
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+        }
 
-        //checking if connected via mobile network or wifi
+        //checking if connected via mobile network or wifi and if so, obtain the type of connection
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             android.net.NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
             android.net.NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
+            //If mobile connection or wifi connection is connected or attempting to connect, return true for connected
             if ((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) {
                 return true;
             } else
@@ -109,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mMovieList.setVisibility(View.INVISIBLE);
         mErrorMessageTextView.setVisibility(View.INVISIBLE);
         mNoInternetTextView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
     }
 
 

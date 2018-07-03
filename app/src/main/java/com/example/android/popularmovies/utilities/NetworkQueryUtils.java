@@ -2,6 +2,8 @@ package com.example.android.popularmovies.utilities;
 
 import android.net.Uri;
 
+import com.example.android.popularmovies.data.URLConstant;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -11,9 +13,9 @@ import java.util.Scanner;
 
 public class NetworkQueryUtils {
 
-    final static String MOVIE_DB_MOST_POPULAR_URL = "https://api.themoviedb.org/3/movie/popular?api_key=";
-    final static String MOVIE_DB_HIGHEST_RATED_URL = "https://api.themoviedb.org/3/movie/top_rated?api_key=";
-    final static String API_KEY = "";  //Please enter your own unique personal API key
+    private final static String MOVIE_DB_MOST_POPULAR_URL = URLConstant.MOST_POPULAR_BASE_URL;
+    private final static String MOVIE_DB_HIGHEST_RATED_URL = URLConstant.HIGHEST_RATED_BASE_URL;
+    private final static String API_KEY = URLConstant.API_KEY;  //Please enter your own unique personal API key
 
     //This will build the URL for the most popular movies
     public static URL buildMostPopularUrl() {

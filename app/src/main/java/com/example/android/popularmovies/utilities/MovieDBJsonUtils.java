@@ -3,6 +3,7 @@ package com.example.android.popularmovies.utilities;
 import android.util.Log;
 
 import com.example.android.popularmovies.Movie;
+import com.example.android.popularmovies.data.URLConstant;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,12 +13,13 @@ import java.util.ArrayList;
 
 public class MovieDBJsonUtils {
 
-    public static final String RESULTS_KEY = "results";
-    public static final String TITLE_KEY = "title";
-    public static final String POSTER_PATH_KEY = "poster_path";
-    public static final String OVERVIEW_KEY = "overview";
-    public static final String VOTE_AVG_KEY = "vote_average";
-    public static final String RELEASE_DATE_KEY = "release_date";
+    private static final String RESULTS_KEY = "results";
+    private static final String TITLE_KEY = "title";
+    private static final String POSTER_PATH_KEY = "poster_path";
+    private static final String OVERVIEW_KEY = "overview";
+    private static final String VOTE_AVG_KEY = "vote_average";
+    private static final String RELEASE_DATE_KEY = "release_date";
+    private static final String POSTER_IMAGE_BASE_URL = URLConstant.POSTER_PATH_BASE_URL;
 
     public static ArrayList<Movie> parseMovieJSON(String movieJSON) {
 
@@ -31,7 +33,7 @@ public class MovieDBJsonUtils {
             for (int i = 0; i < resultsArray.length(); i++) {
                 JSONObject resultsObject = resultsArray.getJSONObject(i);
                 String movieTitle = resultsObject.getString(TITLE_KEY);
-                String moviePosterPath = "http://image.tmdb.org/t/p/w185" + resultsObject.getString(POSTER_PATH_KEY);
+                String moviePosterPath = POSTER_IMAGE_BASE_URL + resultsObject.getString(POSTER_PATH_KEY);
                 String movieOverview = resultsObject.getString(OVERVIEW_KEY);
                 Double movieVoteAvg = resultsObject.getDouble(VOTE_AVG_KEY);
                 String movieReleaseDate = resultsObject.getString(RELEASE_DATE_KEY);

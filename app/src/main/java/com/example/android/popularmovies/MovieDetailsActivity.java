@@ -33,7 +33,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        Movie movie = intent.getParcelableExtra("Movie");
+        //If intent is not null then pass Movie data to activity
+        if (intent != null){
+            Movie movie = intent.getParcelableExtra("Movie");
+            //update UI of new activity with the Movie info
+            updateUI(movie);
+        }
+
+
+
+    }
+
+    //This method will populate the various views with the appropriate Movie data
+    private void updateUI(Movie movie){
 
         mMovieTitle = findViewById(R.id.details_movie_title_tv);
         mReleaseDate = findViewById(R.id.details_movie_release_date_tv);
@@ -57,8 +69,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         Picasso.get()
                 .load(moviePosterURL)
                 .into(mMoviePoster);
-
-
     }
 
     //For implementing Up button functionality
