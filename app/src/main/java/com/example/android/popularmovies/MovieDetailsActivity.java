@@ -40,8 +40,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
             updateUI(movie);
         }
 
-
-
     }
 
     //This method will populate the various views with the appropriate Movie data
@@ -59,7 +57,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         String movieRating = String.valueOf(movie.getVoteAverage()) + "/10";
         String movieSynopsis = movie.getSynopsis();
         String moviePosterURL = movie.getPosterImageUrl();
-
 
         mMovieTitle.setText(movieTitle);
         mReleaseDate.setText(movieReleaseYear);

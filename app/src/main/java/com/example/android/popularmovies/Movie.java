@@ -12,16 +12,18 @@ public class Movie implements Parcelable {
     private String posterImageUrl;
     private Double voteAverage;
     private String synopsis;
+    private int movieID;
 
     public Movie() {
     }
 
-    public Movie(String movieTitle, String releaseDate, String posterImageUrl, Double voteAverage, String synopsis) {
+    public Movie(String movieTitle, String releaseDate, String posterImageUrl, Double voteAverage, String synopsis, int movieID) {
         this.movieTitle = movieTitle;
         this.releaseDate = releaseDate;
         this.posterImageUrl = posterImageUrl;
         this.voteAverage = voteAverage;
         this.synopsis = synopsis;
+        this.movieID = movieID;
     }
 
     public String getMovieTitle() {
@@ -64,6 +66,11 @@ public class Movie implements Parcelable {
         this.synopsis = synopsis;
     }
 
+    public int getMovieID(){ return movieID; }
+
+    public void setMovieID(int movieID) { this.movieID = movieID; }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -77,6 +84,7 @@ public class Movie implements Parcelable {
         parcel.writeString(posterImageUrl);
         parcel.writeDouble(voteAverage);
         parcel.writeString(synopsis);
+        parcel.writeInt(movieID);
 
     }
 
@@ -87,6 +95,7 @@ public class Movie implements Parcelable {
         posterImageUrl = parcel.readString();
         voteAverage = parcel.readDouble();
         synopsis = parcel.readString();
+        movieID = parcel.readInt();
 
     }
 

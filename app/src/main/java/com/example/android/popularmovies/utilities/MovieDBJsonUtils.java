@@ -19,6 +19,7 @@ public class MovieDBJsonUtils {
     private static final String OVERVIEW_KEY = "overview";
     private static final String VOTE_AVG_KEY = "vote_average";
     private static final String RELEASE_DATE_KEY = "release_date";
+    private static final String ID_KEY = "id";
     private static final String POSTER_IMAGE_BASE_URL = URLConstant.POSTER_PATH_BASE_URL;
 
     public static ArrayList<Movie> parseMovieJSON(String movieJSON) {
@@ -32,13 +33,14 @@ public class MovieDBJsonUtils {
 
             for (int i = 0; i < resultsArray.length(); i++) {
                 JSONObject resultsObject = resultsArray.getJSONObject(i);
+                int movieID = resultsObject.getInt(ID_KEY);
                 String movieTitle = resultsObject.getString(TITLE_KEY);
                 String moviePosterPath = POSTER_IMAGE_BASE_URL + resultsObject.getString(POSTER_PATH_KEY);
                 String movieOverview = resultsObject.getString(OVERVIEW_KEY);
                 Double movieVoteAvg = resultsObject.getDouble(VOTE_AVG_KEY);
                 String movieReleaseDate = resultsObject.getString(RELEASE_DATE_KEY);
 
-                Movie newMovie = new Movie(movieTitle, movieReleaseDate, moviePosterPath, movieVoteAvg, movieOverview);
+                Movie newMovie = new Movie(movieTitle, movieReleaseDate, moviePosterPath, movieVoteAvg, movieOverview, movieID);
 
                 movies.add(newMovie);
             }
