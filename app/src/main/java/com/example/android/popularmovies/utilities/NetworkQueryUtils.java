@@ -13,8 +13,8 @@ import java.util.Scanner;
 
 public class NetworkQueryUtils {
 
-    private final static String MOVIE_DB_MOST_POPULAR_URL = URLConstant.MOST_POPULAR_BASE_URL;
-    private final static String MOVIE_DB_HIGHEST_RATED_URL = URLConstant.HIGHEST_RATED_BASE_URL;
+    private final static String MOVIE_DB_MOST_POPULAR_URL = URLConstant.MOVIES_DB_BASE_URL + URLConstant.MOST_POPULAR_BASE_URL;
+    private final static String MOVIE_DB_HIGHEST_RATED_URL = URLConstant.MOVIES_DB_BASE_URL + URLConstant.HIGHEST_RATED_BASE_URL;
     private final static String API_KEY = URLConstant.API_KEY;  //Please enter your own unique personal API key
 
     //This will build the URL for the most popular movies

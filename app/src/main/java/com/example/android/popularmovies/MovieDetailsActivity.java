@@ -36,6 +36,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         //If intent is not null then pass Movie data to activity
         if (intent != null){
             Movie movie = intent.getParcelableExtra("Movie");
+            String movieID = String.valueOf(movie.getMovieID());
+            Log.i("MovieDetailsActivity", movieID);
             //update UI of new activity with the Movie info
             updateUI(movie);
         }
