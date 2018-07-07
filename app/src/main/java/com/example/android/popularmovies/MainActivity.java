@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         new MoviesDBQueryTask().execute(builtURL);
     }
 
+    //RecyclerView becomes visible when movie data has been retrieved
     private void showMovieDataView() {
         mMovieList.setVisibility(View.VISIBLE);
         mErrorMessageTextView.setVisibility(View.INVISIBLE);
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mProgressBar.setVisibility(View.INVISIBLE);
     }
 
+    //Shown when there was an issue retrieving movie data
     private void showErrorMessage() {
         mMovieList.setVisibility(View.INVISIBLE);
         mErrorMessageTextView.setVisibility(View.VISIBLE);
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             return false;
     }
 
+    //Shown when there is no internet connection detected
     private void showNoInternetMessage() {
         mMovieList.setVisibility(View.INVISIBLE);
         mErrorMessageTextView.setVisibility(View.INVISIBLE);

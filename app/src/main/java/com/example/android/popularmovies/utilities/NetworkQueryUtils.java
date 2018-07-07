@@ -47,6 +47,20 @@ public class NetworkQueryUtils {
         return highestRatedURL;
     }
 
+    //This will build the URL for movie trailers
+    public static URL buildMovieTrailerUrl(String movieID){
+        Uri movieTrailerQueryUri =
+                Uri.parse(URLConstant.MOVIES_DB_BASE_URL + movieID + URLConstant.MOVIE_TRAILER_BASE_URL + API_KEY);
+
+        URL movieTrailerURL = null;
+        try {
+            movieTrailerURL = new URL(movieTrailerQueryUri.toString());
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        return movieTrailerURL;
+    }
+
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {

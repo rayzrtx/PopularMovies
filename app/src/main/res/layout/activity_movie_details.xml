@@ -98,9 +98,43 @@
                 android:text="@string/trailers_heading"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:layout_marginStart="15dp"/>
+                android:layout_marginStart="15dp"
+                android:paddingBottom="15dp"/>
 
             <!-- RecyclerView for Trailer items -->
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/movie_trailer_rv"/>
+
+            <!-- Loading indicator is only shown before the first load -->
+            <ProgressBar
+                android:id="@+id/loading_spinner_trailer"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="invisible" />
+
+            <!-- Only visible if there is an error loading data -->
+            <TextView
+                android:id="@+id/error_message_trailer_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="16dp"
+                android:text="@string/error"
+                android:textSize="22sp"
+                android:visibility="invisible" />
+
+            <!-- Show message if there is no internet connection -->
+            <TextView
+                android:id="@+id/no_internet_trailer_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/no_internet"
+                android:textSize="22sp"
+                android:visibility="invisible" />
 
         </LinearLayout>
 
