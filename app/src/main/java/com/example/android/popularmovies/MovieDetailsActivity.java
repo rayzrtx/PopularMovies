@@ -205,7 +205,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 mMovieTrailer = MovieTrailerJsonUtils.parseMovieTrailerJSON(movieTrailerJSON);
 
                 //Bind parsed JSON data to recyclerview and use Adapter to populate UI
-                
+
 
             }
 
