@@ -21,4 +21,9 @@ public class URLConstant {
 
     //Base URL for Reviews of selected Movie
     public static final String MOVIE_REVIEW_BASE_URL = "/reviews?api_key=";
+
+    //Base URL to retreive thumbnail of movie trailer
+    public static final String TRAILER_THUMBNAIL_BASE_URL = "http://i3.ytimg.com/vi/";
+
+    public static final String TRAILER_THUMBNAIL_URL_ENDING = "/hqdefault.jpg";
 }

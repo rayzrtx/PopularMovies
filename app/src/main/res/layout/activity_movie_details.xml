@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -103,9 +103,9 @@
 
             <!-- RecyclerView for Trailer items -->
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/movie_trailer_rv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/movie_trailer_rv"/>
+                android:layout_height="wrap_content" />
 
             <!-- Loading indicator is only shown before the first load -->
             <ProgressBar
@@ -126,18 +126,8 @@
                 android:textSize="22sp"
                 android:visibility="invisible" />
 
-            <!-- Show message if there is no internet connection -->
-            <TextView
-                android:id="@+id/no_internet_trailer_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/no_internet"
-                android:textSize="22sp"
-                android:visibility="invisible" />
-
         </LinearLayout>
 
     </LinearLayout>
 
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

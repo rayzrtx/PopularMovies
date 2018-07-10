@@ -9,6 +9,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.popularmovies.utilities.MovieDBJsonUtils;
 import com.example.android.popularmovies.utilities.MovieTrailerJsonUtils;
@@ -27,7 +29,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MovieDetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity implements TrailerAdapter.TrailerItemClickListener {
 
     //Movie Details variables
     TextView mMovieTitle;
@@ -42,9 +44,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
     ImageView mMovieTrailerImage;
     ProgressBar mLoadingSpinnerTrailer;
     TextView mErrorMessageTrailerTV;
-    TextView mNoInternetTrailerTV;
     ArrayList<Trailer> mMovieTrailer;
     String mMovieID;
+    TrailerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         mLoadingSpinnerTrailer = findViewById(R.id.loading_spinner_trailer);
         mErrorMessageTrailerTV = findViewById(R.id.error_message_trailer_tv);
-        mNoInternetTrailerTV = findViewById(R.id.no_internet_trailer_tv);
 
         //RecyclerView where Movie Trailers will appear
         mMovieTrailerList = findViewById(R.id.movie_trailer_rv);
@@ -79,6 +80,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
             Log.i("MovieDetailsActivity", mMovieID);
             //update UI of new activity with the Movie info
             updateUI(movie);
+            //Use the ID of the movie clicked to retreive Trailer info
+            makeMovieTrailerSearchQuery(mMovieID);
         }
 
     }
@@ -111,6 +114,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     //Will return the URL to download movie trailer JSON
     private void makeMovieTrailerSearchQuery(String movieId){
+        URL builtURL = NetworkQueryUtils.buildMovieTrailerUrl(movieId);
+        new MovieTrailerQueryTask().execute(builtURL);
 
     }
 
@@ -119,7 +124,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mMovieTrailerList.setVisibility(View.VISIBLE);
         mLoadingSpinnerTrailer.setVisibility(View.INVISIBLE);
         mErrorMessageTrailerTV.setVisibility(View.INVISIBLE);
-        mNoInternetTrailerTV.setVisibility(View.INVISIBLE);
     }
 
     //Shown when there was an issue retrieving trailer data
@@ -127,38 +131,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         mMovieTrailerList.setVisibility(View.INVISIBLE);
         mLoadingSpinnerTrailer.setVisibility(View.INVISIBLE);
         mErrorMessageTrailerTV.setVisibility(View.VISIBLE);
-        mNoInternetTrailerTV.setVisibility(View.INVISIBLE);
     }
 
-    private void showNoInternetMessageTrailerView(){
-        mMovieTrailerList.setVisibility(View.INVISIBLE);
-        mLoadingSpinnerTrailer.setVisibility(View.INVISIBLE);
-        mErrorMessageTrailerTV.setVisibility(View.INVISIBLE);
-        mNoInternetTrailerTV.setVisibility(View.VISIBLE);
-    }
-
-    //Checking if device is connected to the internet
-    public boolean isConnected(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = null;
-        if (connectivityManager != null) {
-            networkInfo = connectivityManager.getActiveNetworkInfo();
-        }
-
-        //checking if connected via mobile network or wifi and if so, obtain the type of connection
-        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            android.net.NetworkInfo mobile = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-            android.net.NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-            //If mobile connection or wifi connection is connected or attempting to connect, return true for connected
-            if ((mobile != null && mobile.isConnectedOrConnecting()) || (wifi != null && wifi.isConnectedOrConnecting())) {
-                return true;
-            } else
-                return false;
-
-        } else
-            return false;
-    }
 
     //For implementing Up button functionality
     @Override
@@ -169,6 +143,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
             NavUtils.navigateUpFromSameTask(this);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //TODO Create intent to open up selected youtube trailer
+    @Override
+    public void onTrailerItemClick(int clickedItemIndex) {
+        Toast.makeText(MovieDetailsActivity.this, "Link to movie trailer coming soon!", Toast.LENGTH_SHORT).show();
+
     }
 
     public class MovieTrailerQueryTask extends AsyncTask<URL, Void, String>{
@@ -195,20 +176,29 @@ public class MovieDetailsActivity extends AppCompatActivity {
             return movieTrailerJSONResults; //JSON string with all of the retrieved JSON data that now needs to be parsed
         }
 
+        //If JSON string is not empty or null, parse trailer JSON string
         @Override
         protected void onPostExecute(String movieTrailerJSON) {
             mLoadingSpinnerTrailer.setVisibility(View.INVISIBLE);
             if (movieTrailerJSON != null && movieTrailerJSON != ""){
                 //Set recyclerview to visible and make other views invisible
                 showMovieTrailerView();
-                //Will parse JSON data and return a list of movie objects
+                //Will parse JSON data and return a list of trailer objects
                 mMovieTrailer = MovieTrailerJsonUtils.parseMovieTrailerJSON(movieTrailerJSON);
 
                 //Bind parsed JSON data to recyclerview and use Adapter to populate UI
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MovieDetailsActivity.this);
+                mMovieTrailerList.setLayoutManager(linearLayoutManager);
+                mMovieTrailerList.setNestedScrollingEnabled(false);
+                mAdapter = new TrailerAdapter(MovieDetailsActivity.this, mMovieTrailer, MovieDetailsActivity.this);
+                //Set trailer adapter on trailer recyclerview
+                mMovieTrailerList.setAdapter(mAdapter);
 
-
+            } else {
+                showErrorMessageTrailerView();
             }
 
         }
     }
+
 }
