@@ -1,9 +1,11 @@
 package com.example.android.popularmovies;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
@@ -20,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.popularmovies.data.URLConstant;
 import com.example.android.popularmovies.utilities.MovieDBJsonUtils;
 import com.example.android.popularmovies.utilities.MovieTrailerJsonUtils;
 import com.example.android.popularmovies.utilities.NetworkQueryUtils;
@@ -145,10 +148,28 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         return super.onOptionsItemSelected(item);
     }
 
-    //TODO Create intent to open up selected youtube trailer
+    //When a trailer item is clicked, create intent to view selected youtube trailer
     @Override
     public void onTrailerItemClick(int clickedItemIndex) {
-        Toast.makeText(MovieDetailsActivity.this, "Link to movie trailer coming soon!", Toast.LENGTH_SHORT).show();
+
+        //Extract key of the clicked movie trailer
+        String videoKey = mMovieTrailer.get(clickedItemIndex).getMovieTrailerKey();
+
+        Context context = getApplicationContext();
+
+        //Intent will play selected trailer using the YouTube app (if installed on device)
+        Intent youTubeWebIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URLConstant.YOUTUBE_TRAILER_WEB_BASE_URL + videoKey));
+
+        //Intent will play selected trailer on YouTube website using a browser if YouTube app is not installed
+        Intent youTubeAppIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(URLConstant.YOUTUBE_APP_BASE_URL + videoKey));
+
+        //Try to use YouTube app to view selected trailer
+        try{
+            context.startActivity(youTubeAppIntent);
+        }catch (ActivityNotFoundException e){
+            //If YouTube app is not installed, view in browser
+            context.startActivity(youTubeWebIntent);
+        }
 
     }
 

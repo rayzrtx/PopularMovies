@@ -26,4 +26,10 @@ public class URLConstant {
     public static final String TRAILER_THUMBNAIL_BASE_URL = "http://i3.ytimg.com/vi/";
 
     public static final String TRAILER_THUMBNAIL_URL_ENDING = "/hqdefault.jpg";
+
+    //Base URL to open browser to selected movie trailer if YouTube app is not installed on device
+    public static final String YOUTUBE_TRAILER_WEB_BASE_URL = "http://www.youtube.com/watch?v=";
+
+    //Base URL to open YouTube app to selected movie trailer if app is installed on device
+    public static final String YOUTUBE_APP_BASE_URL = "vnd.youtube:";
 }
