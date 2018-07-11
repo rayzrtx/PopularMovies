@@ -61,6 +61,20 @@ public class NetworkQueryUtils {
         return movieTrailerURL;
     }
 
+    //This will build the URL for the movie reviews
+    public static URL buildMovieReviewUrl(String movieID){
+        Uri movieReviewQueryUri =
+                Uri.parse(URLConstant.MOVIES_DB_BASE_URL + movieID + URLConstant.MOVIE_REVIEW_BASE_URL + API_KEY);
+
+        URL movieReviewURL = null;
+        try {
+            movieReviewURL = new URL(movieReviewQueryUri.toString());
+        }catch (MalformedURLException e){
+            e.printStackTrace();
+        }
+        return movieReviewURL;
+    }
+
     public static String getResponseFromHttpUrl(URL url) throws IOException {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {

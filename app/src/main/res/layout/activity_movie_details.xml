@@ -80,12 +80,70 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="@color/colorAccent"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="30dp"
+            android:background="@color/colorAccent" />
 
         <!-- Trailers Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:paddingBottom="15dp"
+                android:text="@string/trailers_heading"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!-- RecyclerView for Trailer items -->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/movie_trailer_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- Loading indicator is only shown before the first load -->
+                <ProgressBar
+                    android:id="@+id/loading_spinner_trailer"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="invisible" />
+
+                <!-- Only visible if there is an error loading data -->
+                <TextView
+                    android:id="@+id/error_message_trailer_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/error"
+                    android:textSize="22sp"
+                    android:visibility="invisible" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <!-- Horizontal divider line -->
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/colorAccent" />
+
+        <!-- Reviews Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -95,36 +153,51 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/trailers_heading"
-                android:textSize="24sp"
-                android:textStyle="bold"
                 android:layout_marginStart="15dp"
-                android:paddingBottom="15dp"/>
+                android:paddingBottom="15dp"
+                android:text="@string/reviews_heading"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-            <!-- RecyclerView for Trailer items -->
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/movie_trailer_rv"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent">
 
-            <!-- Loading indicator is only shown before the first load -->
-            <ProgressBar
-                android:id="@+id/loading_spinner_trailer"
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:layout_gravity="center_horizontal"
-                android:visibility="invisible" />
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/movie_review_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp" />
 
-            <!-- Only visible if there is an error loading data -->
-            <TextView
-                android:id="@+id/error_message_trailer_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:padding="16dp"
-                android:text="@string/error"
-                android:textSize="22sp"
-                android:visibility="invisible" />
+                <!-- Loading indicator is only shown before the first load -->
+                <ProgressBar
+                    android:id="@+id/loading_spinner_reviews"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="invisible" />
+
+                <!-- Only visible if there is an error loading data -->
+                <TextView
+                    android:id="@+id/error_message_reviews_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/error"
+                    android:textSize="22sp"
+                    android:visibility="invisible" />
+
+                <!-- Only visible if there are no reviews to show -->
+                <TextView
+                    android:id="@+id/empty_review_message_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/no_reviews_found"
+                    android:textSize="22sp"
+                    android:visibility="invisible" />
+
+            </FrameLayout>
 
         </LinearLayout>
 

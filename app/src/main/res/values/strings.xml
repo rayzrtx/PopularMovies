@@ -9,5 +9,7 @@
     <string name="error">An error has occurred. Unable to load results.</string>
     <string name="no_internet">No Internet Connection.</string>
     <string name="trailers_heading">Trailers</string>
+    <string name="reviews_heading">Reviews</string>
+    <string name="no_reviews_found">No Reviews Found</string>
 
 </resources>
