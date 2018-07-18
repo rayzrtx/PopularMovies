@@ -7,7 +7,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.PersistableBundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -62,6 +64,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     ReviewAdapter mReviewAdapter;
     TextView mNoReviewsMessageTV;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +99,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         mMovieReviewAuthorName = findViewById(R.id.movie_review_author_name_tv);
         mMovieReviewContent = findViewById(R.id.movie_review_content_tv);
 
+
         //Set up button on action bar if not null
         ActionBar actionBar = this.getSupportActionBar();
         if (actionBar != null) {
@@ -107,7 +111,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         if (intent != null) {
             Movie movie = intent.getParcelableExtra("Movie");
             mMovieID = String.valueOf(movie.getMovieID());
-            Log.i("MovieDetailsActivity", mMovieID);
             //update UI of new activity with the Movie info
             updateUI(movie);
             //Use the ID of the movie clicked to retreive Trailer info
@@ -116,6 +119,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         }
 
     }
+
 
     //This method will populate the various views with the appropriate Movie data
     private void updateUI(Movie movie) {
@@ -186,6 +190,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         mNoReviewsMessageTV.setVisibility(View.INVISIBLE);
     }
 
+    //Shown when there are no reviews to show for a movie
     private void showNoReviewsView() {
         mMovieReviewRV.setVisibility(View.INVISIBLE);
         mLoadingSpinnerReview.setVisibility(View.INVISIBLE);
@@ -315,12 +320,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 //Will parse JSON data and return a list of review objects
                 mMovieReviewList = MovieReviewJsonUtils.parseMovieReviewJSON(movieReviewJSON);
 
-                //If list of reviews is not null, get length of size of list
+                //If list of reviews is not null, get size of list
                 if (mMovieReviewList != null) {
                     int reviewListSize = mMovieReviewList.size();
                     //If size of list is 0, then show "No reviews" message
                     if (reviewListSize == 0) {
                         showNoReviewsView();
+                        //Otherwise, if list is not null or empty, then pass the list to the adapter
                     } else {
                         //Bind parsed JSON data to recyclerview and use Adapter to populate UI
                         LinearLayoutManager layoutManager = new LinearLayoutManager(MovieDetailsActivity.this);
@@ -331,7 +337,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                         mMovieReviewRV.setAdapter(mReviewAdapter);
                     }
                 }
-
+                //If JSON is null or empty then show error message
             } else {
                 showErrorMessageReviewView();
             }
