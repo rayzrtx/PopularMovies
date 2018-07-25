@@ -5,7 +5,9 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {Favorite.class}, version = 1, exportSchema = false)
+import com.example.android.popularmovies.Movie;
+
+@Database(entities = {Movie.class}, version = 1, exportSchema = false)
 public abstract class FavoritesDatabase extends RoomDatabase {
 
     private static FavoritesDatabase sInstance;

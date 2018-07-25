@@ -64,6 +64,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     ReviewAdapter mReviewAdapter;
     TextView mNoReviewsMessageTV;
 
+    ImageView mHeartIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         mMovieReviewAuthorName = findViewById(R.id.movie_review_author_name_tv);
         mMovieReviewContent = findViewById(R.id.movie_review_content_tv);
 
+        mHeartIcon = findViewById(R.id.favorites_icon);
+
 
         //Set up button on action bar if not null
         ActionBar actionBar = this.getSupportActionBar();
@@ -117,6 +120,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             makeMovieTrailerSearchQuery(mMovieID);
             makeMovieReviewSearchQuery(mMovieID);
         }
+
+        mHeartIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MovieDetailsActivity.this, "Adding to Favorites", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 

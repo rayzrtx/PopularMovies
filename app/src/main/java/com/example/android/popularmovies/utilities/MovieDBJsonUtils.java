@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MovieDBJsonUtils {
 
@@ -22,9 +23,9 @@ public class MovieDBJsonUtils {
     private static final String ID_KEY = "id";
     private static final String POSTER_IMAGE_BASE_URL = URLConstant.POSTER_PATH_BASE_URL;
 
-    public static ArrayList<Movie> parseMovieJSON(String movieJSON) {
+    public static List<Movie> parseMovieJSON(String movieJSON) {
 
-        ArrayList<Movie> movies = new ArrayList<>();
+        List<Movie> movies = new ArrayList<>();
 
         try {
             JSONObject rootObject = new JSONObject(movieJSON);

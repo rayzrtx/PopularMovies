@@ -11,20 +11,19 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     private Context mContext;
-    private ArrayList<Movie> mMovie;
+    private List<Movie> mMovie;
     private final MovieItemClickListener mOnClickListener;
 
     public interface MovieItemClickListener {
         void onMovieItemClick(int clickedItemIndex);
     }
 
-    public MovieAdapter(Context mContext, ArrayList<Movie> mMovie, MovieItemClickListener listener) {
+    public MovieAdapter(Context mContext, List<Movie> mMovie, MovieItemClickListener listener) {
 
         this.mContext = mContext;
         this.mMovie = mMovie;
@@ -54,6 +53,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Picasso.get()
                 .load(mMovie.get(position).getPosterImageUrl())
                 .into(holder.moviePosterIV);
+    }
+
+    void setFavorites(List<Movie> favorites){
+        mMovie = favorites;
+        notifyDataSetChanged();
     }
 
     @Override

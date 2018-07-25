@@ -1,12 +1,18 @@
 package com.example.android.popularmovies;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 //Parcelable interface will assist in storing and retrieving Movie data info to pass through Intent
+@Entity(tableName = "favorites_table")
 public class Movie implements Parcelable {
 
     //Every Movie object will contain these five elements which will be parsed from JSON
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String movieTitle;
     private String releaseDate;
     private String posterImageUrl;
@@ -17,6 +23,8 @@ public class Movie implements Parcelable {
     public Movie() {
     }
 
+    //Constructor used when reading TO database(id not known yet)
+    @Ignore
     public Movie(String movieTitle, String releaseDate, String posterImageUrl, Double voteAverage, String synopsis, int movieID) {
         this.movieTitle = movieTitle;
         this.releaseDate = releaseDate;
@@ -24,6 +32,25 @@ public class Movie implements Parcelable {
         this.voteAverage = voteAverage;
         this.synopsis = synopsis;
         this.movieID = movieID;
+    }
+
+    //Constructor used when reading FROM database (id assigned in db)
+    public Movie(int id, String movieTitle, String releaseDate, String posterImageUrl, Double voteAverage, String synopsis, int movieID) {
+        this.id = id;
+        this.movieTitle = movieTitle;
+        this.releaseDate = releaseDate;
+        this.posterImageUrl = posterImageUrl;
+        this.voteAverage = voteAverage;
+        this.synopsis = synopsis;
+        this.movieID = movieID;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getMovieTitle() {

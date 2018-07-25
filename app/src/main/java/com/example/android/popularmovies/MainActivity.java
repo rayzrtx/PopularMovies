@@ -1,40 +1,42 @@
 package com.example.android.popularmovies;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.android.popularmovies.database.FavoritesViewModel;
 import com.example.android.popularmovies.utilities.MovieDBJsonUtils;
 import com.example.android.popularmovies.utilities.NetworkQueryUtils;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
 
     MovieAdapter mAdapter;
     RecyclerView mMovieList;
-    ArrayList<Movie> mMovie;
+    List<Movie> mMovie;
     TextView mMovieTitle;
     TextView mErrorMessageTextView;
     ProgressBar mProgressBar;
     TextView mNoInternetTextView;
+    FavoritesViewModel mFavoritesViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         mMovieTitle = findViewById(R.id.movie_title_tv);
 
+
         //If there is an internet connection, run query. Else show No Internet message.
         if (isConnected(MainActivity.this)) {
 
@@ -73,6 +76,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     void makeHighestRatedMovieDBSearchQuery() {
         URL builtURL = NetworkQueryUtils.buildHighestRatedUrl();
         new MoviesDBQueryTask().execute(builtURL);
+    }
+
+    void getFavoriteMovies(){
+        mFavoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        mFavoritesViewModel.loadAllFavorites().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movies) {
+                mAdapter.setFavorites(movies);
+            }
+        });
     }
 
     //RecyclerView becomes visible when movie data has been retrieved
