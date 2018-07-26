@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/favorites_text"
-                tools:text="Add To Favorites"
+                android:text="@string/add_to_favorites"
                 android:layout_gravity="center"
                 android:textStyle="bold" />
 

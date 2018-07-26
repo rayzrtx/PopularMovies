@@ -1,5 +1,6 @@
 package com.example.android.popularmovies;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.popularmovies.data.URLConstant;
+import com.example.android.popularmovies.database.FavoritesViewModel;
 import com.example.android.popularmovies.utilities.MovieDBJsonUtils;
 import com.example.android.popularmovies.utilities.MovieReviewJsonUtils;
 import com.example.android.popularmovies.utilities.MovieTrailerJsonUtils;
@@ -43,6 +45,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     TextView mRating;
     TextView mSynopsis;
     ImageView mMoviePoster;
+    //The movie that was clicked
+    Movie mMovie;
 
     //Movie Trailer RecyclerView variables
     RecyclerView mMovieTrailerList;
@@ -65,6 +69,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     TextView mNoReviewsMessageTV;
 
     ImageView mHeartIcon;
+    FavoritesViewModel mFavoritesViewModel;
+    TextView mFavoritesTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +107,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         mMovieReviewContent = findViewById(R.id.movie_review_content_tv);
 
         mHeartIcon = findViewById(R.id.favorites_icon);
+        mFavoritesTextView = findViewById(R.id.favorites_text);
 
 
         //Set up button on action bar if not null
@@ -112,10 +119,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         Intent intent = getIntent();
         //If intent is not null then pass Movie data to activity
         if (intent != null) {
-            Movie movie = intent.getParcelableExtra("Movie");
-            mMovieID = String.valueOf(movie.getMovieID());
+            mMovie = intent.getParcelableExtra("Movie");
+            mMovieID = String.valueOf(mMovie.getMovieID());
             //update UI of new activity with the Movie info
-            updateUI(movie);
+            updateUI(mMovie);
             //Use the ID of the movie clicked to retreive Trailer info
             makeMovieTrailerSearchQuery(mMovieID);
             makeMovieReviewSearchQuery(mMovieID);
@@ -124,7 +131,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         mHeartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MovieDetailsActivity.this, "Adding to Favorites", Toast.LENGTH_SHORT).show();
+                //Adding movie to the favorites database when heart icon is clicked to add as a favorite
+                mFavoritesViewModel = ViewModelProviders.of(MovieDetailsActivity.this).get(FavoritesViewModel.class);
+                mFavoritesViewModel.insert(mMovie);
+                mHeartIcon.setImageResource(R.drawable.ic_favorite_red_heart_24dp);
+                mFavoritesTextView.setText(R.string.remove_from_favorites);
+
+                Toast.makeText(MovieDetailsActivity.this, "Added to Favorites", Toast.LENGTH_SHORT).show();
             }
         });
 

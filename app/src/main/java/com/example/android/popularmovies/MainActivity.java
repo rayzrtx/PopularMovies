@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         new MoviesDBQueryTask().execute(builtURL);
     }
 
+    //Will load all favorite movies in database
     void getFavoriteMovies(){
         mFavoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         mFavoritesViewModel.loadAllFavorites().observe(this, new Observer<List<Movie>>() {
@@ -206,6 +207,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
                 //Will return list of highest rated movies
                 makeHighestRatedMovieDBSearchQuery();
+
+                return true;
+
+            case R.id.action_sort_item_favorites:
+
+                //Will return list of movies that have been added as a favorite
+                getFavoriteMovies();
 
                 return true;
         }
