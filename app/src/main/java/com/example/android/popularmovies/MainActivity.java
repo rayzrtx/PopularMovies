@@ -84,7 +84,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mFavoritesViewModel.loadAllFavorites().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
-                mAdapter.setFavorites(movies);
+                //Set the list data to read the movies from favorites db and not the network data list
+                mMovie = movies;
+                mAdapter.setFavorites(mMovie);
+
             }
         });
     }

@@ -26,6 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.popularmovies.data.URLConstant;
+import com.example.android.popularmovies.database.FavoritesDAO;
+import com.example.android.popularmovies.database.FavoritesDatabase;
 import com.example.android.popularmovies.database.FavoritesViewModel;
 import com.example.android.popularmovies.utilities.MovieDBJsonUtils;
 import com.example.android.popularmovies.utilities.MovieReviewJsonUtils;
@@ -71,6 +73,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     ImageView mHeartIcon;
     FavoritesViewModel mFavoritesViewModel;
     TextView mFavoritesTextView;
+    FavoritesDatabase mDatabase;
+    boolean isFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +112,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
 
         mHeartIcon = findViewById(R.id.favorites_icon);
         mFavoritesTextView = findViewById(R.id.favorites_text);
+        mDatabase = FavoritesDatabase.getDatabase(this);
+
 
 
         //Set up button on action bar if not null
@@ -131,16 +137,28 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         mHeartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Adding movie to the favorites database when heart icon is clicked to add as a favorite
-                mFavoritesViewModel = ViewModelProviders.of(MovieDetailsActivity.this).get(FavoritesViewModel.class);
-                mFavoritesViewModel.insert(mMovie);
-                mHeartIcon.setImageResource(R.drawable.ic_favorite_red_heart_24dp);
-                mFavoritesTextView.setText(R.string.remove_from_favorites);
-
-                Toast.makeText(MovieDetailsActivity.this, "Added to Favorites", Toast.LENGTH_SHORT).show();
+                addToFavorites();
             }
         });
 
+    }
+
+    //Add movie to favorites database
+    private void addToFavorites(){
+        //Adding movie to the favorites database when heart icon is clicked to add as a favorite
+        mFavoritesViewModel = ViewModelProviders.of(MovieDetailsActivity.this).get(FavoritesViewModel.class);
+        mFavoritesViewModel.insert(mMovie);
+        mHeartIcon.setImageResource(R.drawable.ic_favorite_red_heart_24dp);
+        mFavoritesTextView.setText(R.string.remove_from_favorites);
+
+        Toast.makeText(MovieDetailsActivity.this, "Added to Favorites", Toast.LENGTH_SHORT).show();
+    }
+
+    //Remove movie from favorites database
+    private void removeFromFavorites(){
+        mFavoritesViewModel = ViewModelProviders.of(MovieDetailsActivity.this).get(FavoritesViewModel.class);
+        mFavoritesViewModel.delete(mMovie);
+        Toast.makeText(MovieDetailsActivity.this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
     }
 
 
