@@ -1,5 +1,6 @@
 package com.example.android.popularmovies;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -18,9 +19,11 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.android.popularmovies.database.FavoritesDatabase;
 import com.example.android.popularmovies.database.FavoritesViewModel;
 import com.example.android.popularmovies.utilities.MovieDBJsonUtils;
 import com.example.android.popularmovies.utilities.NetworkQueryUtils;
+import com.facebook.stetho.Stetho;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,12 +39,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     TextView mErrorMessageTextView;
     ProgressBar mProgressBar;
     TextView mNoInternetTextView;
-    FavoritesViewModel mFavoritesViewModel;
+
+    FavoritesDatabase mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Stetho.initializeWithDefaults(this);
 
         mErrorMessageTextView = findViewById(R.id.error_message_tv);
         mProgressBar = findViewById(R.id.loading_spinner);
@@ -56,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mMovie = new ArrayList<>();
 
         mMovieTitle = findViewById(R.id.movie_title_tv);
+
+        mDatabase = FavoritesDatabase.getDatabase(getApplicationContext());
 
 
         //If there is an internet connection, run query. Else show No Internet message.
@@ -80,16 +87,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     //Will load all favorite movies in database
     void getFavoriteMovies(){
-        mFavoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
-        mFavoritesViewModel.loadAllFavorites().observe(this, new Observer<List<Movie>>() {
+        final LiveData<List<Movie>> favoriteMovies = mDatabase.favoritesDAO().loadAllFavorites();
+        favoriteMovies.observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
-                //Set the list data to read the movies from favorites db and not the network data list
                 mMovie = movies;
                 mAdapter.setFavorites(mMovie);
-
             }
         });
+
     }
 
     //RecyclerView becomes visible when movie data has been retrieved

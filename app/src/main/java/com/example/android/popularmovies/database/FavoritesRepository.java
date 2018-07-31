@@ -20,17 +20,18 @@ public class FavoritesRepository {
         mAllFavorites = mFavoritesDAO.loadAllFavorites();
     }
 
-    LiveData<List<Movie>> loadAllFavorites(){
+    LiveData<List<Movie>>loadAllFavorites(){
         return mAllFavorites;
     }
 
+
     //Insert must be done on a background thread
-    public void insert(Movie favoriteMovie){
+    public void insertFavorite(Movie favoriteMovie){
         new insertAsyncTask(mFavoritesDAO).execute(favoriteMovie);
     }
 
     //Delete must be done on a background thread
-    public void delete(Movie favoriteMovie){
+    public void deleteFavorite(Movie favoriteMovie){
         new deleteAsyncTask(mFavoritesDAO).execute(favoriteMovie);
     }
 
