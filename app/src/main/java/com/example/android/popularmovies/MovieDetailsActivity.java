@@ -1,6 +1,7 @@
 package com.example.android.popularmovies;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
@@ -30,6 +32,8 @@ import com.example.android.popularmovies.data.URLConstant;
 import com.example.android.popularmovies.database.FavoritesDAO;
 import com.example.android.popularmovies.database.FavoritesDatabase;
 import com.example.android.popularmovies.database.FavoritesViewModel;
+import com.example.android.popularmovies.database.QueryFavoritesViewModel;
+import com.example.android.popularmovies.database.QueryFavoritesViewModelFactory;
 import com.example.android.popularmovies.utilities.MovieDBJsonUtils;
 import com.example.android.popularmovies.utilities.MovieReviewJsonUtils;
 import com.example.android.popularmovies.utilities.MovieTrailerJsonUtils;
@@ -79,6 +83,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
 
     int numberOfMoviesInDB;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +125,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
 
 
 
+
         //Set up button on action bar if not null
         ActionBar actionBar = this.getSupportActionBar();
         if (actionBar != null) {
@@ -137,17 +144,24 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             makeMovieReviewSearchQuery(mMovieID);
         }
 
-        //Querying DB by returning number of Movies in Favorites DB with that movie ID
+        //Querying DB by returning List of Movies in Favorites DB with that movie ID
         queryIfFavorite(mMovie);
 
 
         mHeartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //If Movie is in Favorite database then delete it and update the favorites icon
                 if (isFavoriteMovie()){
                     removeFromFavorites();
+                    //mHeartIcon.setImageResource(R.drawable.ic_favorite_clear_heart_24dp);
+                    //mFavoritesTextView.setText(R.string.add_to_favorites);
+                    //queryIfFavorite(mMovie);
                 }else {
                     addToFavorites();
+                    //queryIfFavorite(mMovie);
+                    //mHeartIcon.setImageResource(R.drawable.ic_favorite_red_heart_24dp);
+                    //mFavoritesTextView.setText(R.string.remove_from_favorites);
                 }
             }
         });
@@ -163,8 +177,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 mDatabase.favoritesDAO().insertFavorite(mMovie);
             }
         });
-
-
         Toast.makeText(MovieDetailsActivity.this, "Added to Favorites", Toast.LENGTH_SHORT).show();
     }
 
@@ -195,32 +207,30 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         return numberOfMoviesInDB > 0;
     }
 
-    //Querying DB by returning number of Movies in Favorites DB with that movie ID
+    //Querying DB by returning List of Movies in Favorites DB with that movie ID
     private void queryIfFavorite(final Movie favoriteMovie){
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
                 int id = favoriteMovie.getMovieID();
-                List<Movie> favoriteMovie = mDatabase.favoritesDAO().checkForFavoriteMovie(id);
-                numberOfMoviesInDB = favoriteMovie.size();
-                //Update the Favorites icon and text accordingly
-                runOnUiThread(new Runnable() {
+                QueryFavoritesViewModelFactory factory = new QueryFavoritesViewModelFactory(mDatabase, id);
+                QueryFavoritesViewModel viewModel = ViewModelProviders.of(MovieDetailsActivity.this, factory).get(QueryFavoritesViewModel.class);
+                //Set observer on the movie to see if it is added as a favorite or removed from favorites and update UI in real time
+                viewModel.getFavoriteMovie().observe(MovieDetailsActivity.this, new Observer<List<Movie>>() {
                     @Override
-                    public void run() {
-                        //If number returned is greater than 0, then movie is a favorite
+                    public void onChanged(@Nullable List<Movie> movies) {
+                        numberOfMoviesInDB = movies.size();
+                        //If size of List returned is greater than 0, then movie is a favorite so heart icon will be red
                         if (numberOfMoviesInDB > 0){
                             mHeartIcon.setImageResource(R.drawable.ic_favorite_red_heart_24dp);
                             mFavoritesTextView.setText(R.string.remove_from_favorites);
                         } else {
+                            //Movie is not a favorite so heart will be clear
                             mHeartIcon.setImageResource(R.drawable.ic_favorite_clear_heart_24dp);
                             mFavoritesTextView.setText(R.string.add_to_favorites);
                         }
                     }
                 });
-            }
-        });
 
-    }
+            }
+
 
 
 

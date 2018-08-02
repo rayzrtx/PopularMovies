@@ -87,8 +87,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     //Will load all favorite movies in database
     void getFavoriteMovies(){
-        final LiveData<List<Movie>> favoriteMovies = mDatabase.favoritesDAO().loadAllFavorites();
-        favoriteMovies.observe(this, new Observer<List<Movie>>() {
+        FavoritesViewModel favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        favoritesViewModel.loadAllFavorites().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 mMovie = movies;

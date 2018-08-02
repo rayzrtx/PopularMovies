@@ -32,6 +32,6 @@ public interface FavoritesDAO {
 
     //Query will return a List of Movies in Favorites DB that match the movie ID
     @Query("SELECT * FROM favorites_table WHERE movieID = :favoriteMovieID")
-    List<Movie> checkForFavoriteMovie(int favoriteMovieID);
+    LiveData<List<Movie>> checkForFavoriteMovie(int favoriteMovieID);
 
 }

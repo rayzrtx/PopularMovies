@@ -13,13 +13,15 @@ import java.util.List;
 //To provide data to the UI and to survive configuration changes
 public class FavoritesViewModel extends AndroidViewModel {
 
-    private FavoritesRepository mRepository;
+
     private LiveData<List<Movie>> mAllFavorites;
 
     public FavoritesViewModel(@NonNull Application application) {
         super(application);
-        mRepository = new FavoritesRepository(application);
-        mAllFavorites = mRepository.loadAllFavorites();
+        FavoritesDatabase favoritesDatabase = FavoritesDatabase.getDatabase(this.getApplication());
+        mAllFavorites = favoritesDatabase.favoritesDAO().loadAllFavorites();
+
+
     }
 
     public LiveData<List<Movie>> loadAllFavorites(){
@@ -27,11 +29,4 @@ public class FavoritesViewModel extends AndroidViewModel {
     }
 
 
-    public void insert(Movie favoriteMovie){
-        mRepository.insertFavorite(favoriteMovie);
-    }
-
-    public void delete(Movie favoriteMovie){
-        mRepository.deleteFavorite(favoriteMovie);
-    }
 }
