@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //TODO Delete before submitting
         Stetho.initializeWithDefaults(this);
 
         mErrorMessageTextView = findViewById(R.id.error_message_tv);
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         new MoviesDBQueryTask().execute(builtURL);
     }
 
-    //Will load all favorite movies in database
+    //Will load all favorite movies in database and observers will be notified when there are changes to favorites DB
     void getFavoriteMovies(){
         FavoritesViewModel favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         favoritesViewModel.loadAllFavorites().observe(this, new Observer<List<Movie>>() {

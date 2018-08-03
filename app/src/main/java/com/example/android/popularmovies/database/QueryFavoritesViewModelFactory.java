@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
+//Class created so that favorite movie ID value can be passed to the ViewModel
 public class QueryFavoritesViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private final FavoritesDatabase mFavoritesDatabase;

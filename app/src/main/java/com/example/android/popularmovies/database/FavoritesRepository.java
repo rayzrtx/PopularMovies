@@ -4,11 +4,13 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
+import com.example.android.popularmovies.AppExecutors;
 import com.example.android.popularmovies.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//All database logic handled through Repository
 public class FavoritesRepository {
 
     private FavoritesDAO mFavoritesDAO;
@@ -20,50 +22,30 @@ public class FavoritesRepository {
         mAllFavorites = mFavoritesDAO.loadAllFavorites();
     }
 
+    //LiveData runs in background by default
     LiveData<List<Movie>>loadAllFavorites(){
         return mAllFavorites;
     }
 
 
-    //Insert must be done on a background thread
-    public void insertFavorite(Movie favoriteMovie){
-        new insertAsyncTask(mFavoritesDAO).execute(favoriteMovie);
+    public void insertFavorite(final Movie favoriteMovie){
+        //Insert must be done on a background thread
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mFavoritesDAO.insertFavorite(favoriteMovie);
+            }
+        });
     }
 
-    //Delete must be done on a background thread
-    public void deleteFavorite(Movie favoriteMovie){
-        new deleteAsyncTask(mFavoritesDAO).execute(favoriteMovie);
+    public void deleteFavoriteById(final int id){
+        //Delete must be done on a background thread
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mFavoritesDAO.deleteByFavoriteById(id);
+            }
+        });
     }
 
-    //AsyncTask that handles inserting into database in background thread
-    private static class insertAsyncTask extends AsyncTask<Movie, Void, Void>{
-
-        private FavoritesDAO mAsyncTaskDAO;
-
-        insertAsyncTask(FavoritesDAO dao){
-            mAsyncTaskDAO = dao;
-        }
-
-        @Override
-        protected Void doInBackground(Movie... movies) {
-            mAsyncTaskDAO.insertFavorite(movies[0]);
-            return null;
-        }
-    }
-
-    //AsyncTask to handle deleting favorites from database in background thread
-    private static class deleteAsyncTask extends AsyncTask<Movie, Void, Void>{
-
-        private FavoritesDAO mDeleteAsyncTaskDAO;
-
-        deleteAsyncTask(FavoritesDAO dao){
-            mDeleteAsyncTaskDAO = dao;
-        }
-
-        @Override
-        protected Void doInBackground(Movie... movies) {
-            mDeleteAsyncTaskDAO.deleteFavorite(movies[0]);
-            return null;
-        }
-    }
 }

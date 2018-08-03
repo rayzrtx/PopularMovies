@@ -84,7 +84,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     int numberOfMoviesInDB;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,14 +153,9 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
                 //If Movie is in Favorite database then delete it and update the favorites icon
                 if (isFavoriteMovie()){
                     removeFromFavorites();
-                    //mHeartIcon.setImageResource(R.drawable.ic_favorite_clear_heart_24dp);
-                    //mFavoritesTextView.setText(R.string.add_to_favorites);
-                    //queryIfFavorite(mMovie);
+
                 }else {
                     addToFavorites();
-                    //queryIfFavorite(mMovie);
-                    //mHeartIcon.setImageResource(R.drawable.ic_favorite_red_heart_24dp);
-                    //mFavoritesTextView.setText(R.string.remove_from_favorites);
                 }
             }
         });
@@ -170,36 +164,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
 
     //Add movie to favorites database
     private void addToFavorites(){
-        //Run query in background thread
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                mDatabase.favoritesDAO().insertFavorite(mMovie);
-            }
-        });
+        FavoritesViewModel favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        favoritesViewModel.insertFavorite(mMovie);
         Toast.makeText(MovieDetailsActivity.this, "Added to Favorites", Toast.LENGTH_SHORT).show();
     }
 
     //Remove movie from favorites database
     private void removeFromFavorites(){
-        //run query in background thread
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                //Get the clicked movie's specific ID
-                int id = mMovie.getMovieID();
-                //Query the database for all movies with the movie id and delete them from DB
-                mDatabase.favoritesDAO().deleteByFavoriteById(id);
-                //Thread for any UI changes
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MovieDetailsActivity.this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-
+        int id = mMovie.getMovieID();
+        FavoritesViewModel favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        favoritesViewModel.deleteFavoriteById(id);
+        Toast.makeText(MovieDetailsActivity.this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
     }
 
     //If there is at least one movie in Favorites DB with movie ID then movie is a favorite

@@ -15,11 +15,13 @@ public class FavoritesViewModel extends AndroidViewModel {
 
 
     private LiveData<List<Movie>> mAllFavorites;
+    private FavoritesRepository mFavoritesRepository;
 
+    //Calls to database go through Repository
     public FavoritesViewModel(@NonNull Application application) {
         super(application);
-        FavoritesDatabase favoritesDatabase = FavoritesDatabase.getDatabase(this.getApplication());
-        mAllFavorites = favoritesDatabase.favoritesDAO().loadAllFavorites();
+        mFavoritesRepository = new FavoritesRepository(application);
+        mAllFavorites = mFavoritesRepository.loadAllFavorites();
 
 
     }
@@ -28,5 +30,12 @@ public class FavoritesViewModel extends AndroidViewModel {
         return mAllFavorites;
     }
 
+    public void insertFavorite(Movie movie){
+        mFavoritesRepository.insertFavorite(movie);
+    }
+
+    public void deleteFavoriteById(int id){
+        mFavoritesRepository.deleteFavoriteById(id);
+    }
 
 }
