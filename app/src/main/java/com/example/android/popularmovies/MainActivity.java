@@ -42,12 +42,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     FavoritesDatabase mDatabase;
 
+    private final String MENU_SELECTION = "menu_selection";
+    private int selected;
+    MenuItem selectedMenuItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //TODO Delete before submitting
-        Stetho.initializeWithDefaults(this);
+
+        if (savedInstanceState != null){
+            selected = savedInstanceState.getInt(MENU_SELECTION);
+        } else {
+            selected = R.id.action_sort_item_most_popular;
+        }
 
         mErrorMessageTextView = findViewById(R.id.error_message_tv);
         mProgressBar = findViewById(R.id.loading_spinner);
@@ -68,11 +76,22 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         //If there is an internet connection, run query. Else show No Internet message.
         if (isConnected(MainActivity.this)) {
-
             makeMovieDBSearchQuery();
         } else
             showNoInternetMessage();
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(MENU_SELECTION, selected);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        selected = savedInstanceState.getInt(MENU_SELECTION);
     }
 
     //Will return the URL to download Movie DB json info for most popular movies
@@ -199,15 +218,32 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         // Inflate the menu options from the res/menu/sort_menu.xml file.
         // This adds menu items to the app bar.
         getMenuInflater().inflate(R.menu.sort_menu, menu);
+
+        switch (selected){
+            case R.id.action_sort_item_most_popular:
+                selectedMenuItem = menu.findItem(R.id.action_sort_item_most_popular);
+                break;
+
+            case R.id.action_sort_item_highest_rated:
+                selectedMenuItem = menu.findItem(R.id.action_sort_item_highest_rated);
+                break;
+
+            case R.id.action_sort_item_favorites:
+                selectedMenuItem = menu.findItem(R.id.action_sort_item_favorites);
+                break;
+        }
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
         // User clicked on a menu option in the app bar overflow menu
-        switch (item.getItemId()) {
+        switch (id) {
             case R.id.action_sort_item_most_popular:
 
+                selected = id;
                 //Will return list of most popular movies
                 makeMovieDBSearchQuery();
 
@@ -215,6 +251,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
             case R.id.action_sort_item_highest_rated:
 
+                selected = id;
                 //Will return list of highest rated movies
                 makeHighestRatedMovieDBSearchQuery();
 
@@ -222,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
             case R.id.action_sort_item_favorites:
 
+                selected = id;
                 //Will return list of movies that have been added as a favorite
                 getFavoriteMovies();
 
