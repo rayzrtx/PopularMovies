@@ -45,14 +45,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     TextView mNoInternetTextView;
 
     FavoritesDatabase mDatabase;
-
-    private final String LIST_STATE_KEY = "recycler_list_state";
     GridLayoutManager gridLayoutManager;
-    Parcelable movieListParcelable;
-    private final String MENU_SELECTED_KEY = "menu_selection";
-    int selectedMenuItemID;
-    public static final String BUNDLE_MOVIES_KEY = "movies";
-    public static final String BUNDLE_RECYCLER_POSITION_KEY = "recycler_position";
+
+    final String MOVIE_CATEGORY_KEY = "movie_category";
+    final String POPULAR = "most_popular";
+    final String TOP_RATED = "top_rated";
+    final String FAVORITES = "favorites";
+    String currentMovieSelection;
+    SharedPreferences sharedPreferences;
+
 
 
     @Override
@@ -77,24 +78,41 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         mDatabase = FavoritesDatabase.getDatabase(getApplicationContext());
 
-        selectedMenuItemID = R.id.action_sort_item_most_popular;
+        currentMovieSelection = getMenuSelection();
+
+        switch (currentMovieSelection) {
+            case POPULAR:
+                makeMovieDBSearchQuery();
+                break;
+            case TOP_RATED:
+                makeHighestRatedMovieDBSearchQuery();
+                break;
+            case FAVORITES:
+                getFavoriteMovies();
+        }
 
 
-        if (savedInstanceState != null){
-            //Not sure what to put here
-        } else
-            Log.i("MainActivity", "savedInstanceState is null");
-            makeMovieDBSearchQuery();
-
-
-        //If there is an internet connection, run query. Else show No Internet message.
+        //If there is no internet connection, show No Internet message. Otherwise run the query.
         if (!isConnected(MainActivity.this)) {
 
-                showNoInternetMessage();
+            showNoInternetMessage();
+
         }
 
     }
 
+    public String getMenuSelection(){
+        sharedPreferences = this.getSharedPreferences("Selection", Context.MODE_PRIVATE);
+        String sortBy = sharedPreferences.getString(MOVIE_CATEGORY_KEY, POPULAR);
+        return sortBy;
+    }
+
+    public void saveMenuSelection(String newMenuSelection){
+        sharedPreferences = this.getSharedPreferences("Selection", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(MOVIE_CATEGORY_KEY, newMenuSelection);
+        editor.apply();
+    }
 
     //Will return the URL to download Movie DB json info for most popular movies
     void makeMovieDBSearchQuery() {
@@ -108,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
     //Will load all favorite movies in database and observers will be notified when there are changes to favorites DB
-    void getFavoriteMovies(){
+    void getFavoriteMovies() {
         FavoritesViewModel favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         favoritesViewModel.loadAllFavorites().observe(this, new Observer<List<Movie>>() {
             @Override
@@ -228,22 +246,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-
         // User clicked on a menu option in the app bar overflow menu
         switch (id) {
             case R.id.action_sort_item_most_popular:
+                saveMenuSelection(POPULAR);
                 //Will return list of most popular movies
                 makeMovieDBSearchQuery();
 
                 return true;
 
             case R.id.action_sort_item_highest_rated:
+                saveMenuSelection(TOP_RATED);
                 //Will return list of highest rated movies
                 makeHighestRatedMovieDBSearchQuery();
 
                 return true;
 
             case R.id.action_sort_item_favorites:
+                saveMenuSelection(FAVORITES);
                 //Will return list of movies that have been added as a favorite
                 getFavoriteMovies();
 
