@@ -5,19 +5,23 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.popularmovies.database.FavoritesDatabase;
 import com.example.android.popularmovies.database.FavoritesViewModel;
@@ -42,20 +46,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     FavoritesDatabase mDatabase;
 
-    private final String MENU_SELECTION = "menu_selection";
-    private int selected;
-    MenuItem selectedMenuItem;
+    private final String LIST_STATE_KEY = "recycler_list_state";
+    GridLayoutManager gridLayoutManager;
+    Parcelable movieListParcelable;
+    private final String MENU_SELECTED_KEY = "menu_selection";
+    int selectedMenuItemID;
+    public static final String BUNDLE_MOVIES_KEY = "movies";
+    public static final String BUNDLE_RECYCLER_POSITION_KEY = "recycler_position";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState != null){
-            selected = savedInstanceState.getInt(MENU_SELECTION);
-        } else {
-            selected = R.id.action_sort_item_most_popular;
-        }
 
         mErrorMessageTextView = findViewById(R.id.error_message_tv);
         mProgressBar = findViewById(R.id.loading_spinner);
@@ -73,26 +77,24 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         mDatabase = FavoritesDatabase.getDatabase(getApplicationContext());
 
+        selectedMenuItemID = R.id.action_sort_item_most_popular;
+
+
+        if (savedInstanceState != null){
+            //Not sure what to put here
+        } else
+            Log.i("MainActivity", "savedInstanceState is null");
+            makeMovieDBSearchQuery();
+
 
         //If there is an internet connection, run query. Else show No Internet message.
-        if (isConnected(MainActivity.this)) {
-            makeMovieDBSearchQuery();
-        } else
-            showNoInternetMessage();
+        if (!isConnected(MainActivity.this)) {
+
+                showNoInternetMessage();
+        }
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putInt(MENU_SELECTION, selected);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        selected = savedInstanceState.getInt(MENU_SELECTION);
-    }
 
     //Will return the URL to download Movie DB json info for most popular movies
     void makeMovieDBSearchQuery() {
@@ -201,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 mMovie = MovieDBJsonUtils.parseMovieJSON(movieJSON); //Will parse JSON data and return a list of movie objects
 
                 //Bind parsed JSON data to recyclerview and use Adapter to populate UI
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
+                gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
                 mMovieList.setLayoutManager(gridLayoutManager);
                 mAdapter = new MovieAdapter(MainActivity.this, mMovie, MainActivity.this);
                 mMovieList.setAdapter(mAdapter);
@@ -219,47 +221,29 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         // This adds menu items to the app bar.
         getMenuInflater().inflate(R.menu.sort_menu, menu);
 
-        switch (selected){
-            case R.id.action_sort_item_most_popular:
-                selectedMenuItem = menu.findItem(R.id.action_sort_item_most_popular);
-                break;
-
-            case R.id.action_sort_item_highest_rated:
-                selectedMenuItem = menu.findItem(R.id.action_sort_item_highest_rated);
-                break;
-
-            case R.id.action_sort_item_favorites:
-                selectedMenuItem = menu.findItem(R.id.action_sort_item_favorites);
-                break;
-        }
-
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+
         // User clicked on a menu option in the app bar overflow menu
         switch (id) {
             case R.id.action_sort_item_most_popular:
-
-                selected = id;
                 //Will return list of most popular movies
                 makeMovieDBSearchQuery();
 
                 return true;
 
             case R.id.action_sort_item_highest_rated:
-
-                selected = id;
                 //Will return list of highest rated movies
                 makeHighestRatedMovieDBSearchQuery();
 
                 return true;
 
             case R.id.action_sort_item_favorites:
-
-                selected = id;
                 //Will return list of movies that have been added as a favorite
                 getFavoriteMovies();
 
