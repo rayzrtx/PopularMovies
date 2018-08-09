@@ -14,8 +14,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:configChanges="orientation">
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -55,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     SharedPreferences sharedPreferences;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         //This is the recycler view where the list of movie posters will appear
         mMovieList = findViewById(R.id.movies_rv);
+
         //Recyclerview is invisible until data is retreived
         mMovieList.setVisibility(View.INVISIBLE);
 
@@ -78,8 +78,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         mDatabase = FavoritesDatabase.getDatabase(getApplicationContext());
 
+        //Selected menu item
         currentMovieSelection = getMenuSelection();
 
+        //Load proper list depending on which menu item was selected
         switch (currentMovieSelection) {
             case POPULAR:
                 makeMovieDBSearchQuery();
@@ -88,11 +90,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 makeHighestRatedMovieDBSearchQuery();
                 break;
             case FAVORITES:
+                mMovieList.setVisibility(View.VISIBLE);
+                bindDataToRecyclerview();
                 getFavoriteMovies();
         }
 
 
-        //If there is no internet connection, show No Internet message. Otherwise run the query.
+        //If there is no internet connection, show No Internet message.
         if (!isConnected(MainActivity.this)) {
 
             showNoInternetMessage();
@@ -101,13 +105,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     }
 
-    public String getMenuSelection(){
+    //Will return the default Most Popular list upon initial load. Otherwise it will return the selected menu item.
+    public String getMenuSelection() {
         sharedPreferences = this.getSharedPreferences("Selection", Context.MODE_PRIVATE);
         String sortBy = sharedPreferences.getString(MOVIE_CATEGORY_KEY, POPULAR);
         return sortBy;
     }
 
-    public void saveMenuSelection(String newMenuSelection){
+    public void saveMenuSelection(String newMenuSelection) {
         sharedPreferences = this.getSharedPreferences("Selection", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(MOVIE_CATEGORY_KEY, newMenuSelection);
@@ -185,6 +190,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mProgressBar.setVisibility(View.INVISIBLE);
     }
 
+    //Bind data to recyclerview and use Adapter to populate UI
+    private void bindDataToRecyclerview() {
+        gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
+        mMovieList.setLayoutManager(gridLayoutManager);
+        mAdapter = new MovieAdapter(MainActivity.this, mMovie, MainActivity.this);
+        mMovieList.setAdapter(mAdapter);
+    }
+
 
     //AsyncTask to perform network request in background thread
     public class MoviesDBQueryTask extends AsyncTask<URL, Void, String> {
@@ -221,10 +234,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 mMovie = MovieDBJsonUtils.parseMovieJSON(movieJSON); //Will parse JSON data and return a list of movie objects
 
                 //Bind parsed JSON data to recyclerview and use Adapter to populate UI
-                gridLayoutManager = new GridLayoutManager(MainActivity.this, 2);
-                mMovieList.setLayoutManager(gridLayoutManager);
-                mAdapter = new MovieAdapter(MainActivity.this, mMovie, MainActivity.this);
-                mMovieList.setAdapter(mAdapter);
+                bindDataToRecyclerview();
 
             } else {
                 showErrorMessage();
