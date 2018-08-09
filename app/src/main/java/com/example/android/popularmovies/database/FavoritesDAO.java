@@ -9,7 +9,6 @@ import android.arch.persistence.room.Query;
 
 import com.example.android.popularmovies.Movie;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //This class is where all methods to access the database are defined

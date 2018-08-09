@@ -55,7 +55,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
                 .into(holder.moviePosterIV);
     }
 
-    void setFavorites(List<Movie> favorites){
+    void setFavorites(List<Movie> favorites) {
         mMovie = favorites;
         notifyDataSetChanged();
     }

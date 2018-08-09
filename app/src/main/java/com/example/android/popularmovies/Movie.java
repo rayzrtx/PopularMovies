@@ -93,9 +93,13 @@ public class Movie implements Parcelable {
         this.synopsis = synopsis;
     }
 
-    public int getMovieID(){ return movieID; }
+    public int getMovieID() {
+        return movieID;
+    }
 
-    public void setMovieID(int movieID) { this.movieID = movieID; }
+    public void setMovieID(int movieID) {
+        this.movieID = movieID;
+    }
 
 
     @Override

@@ -15,7 +15,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
     private Context mContext;
     private ArrayList<Review> mReview;
 
-    public ReviewAdapter(Context mContext, ArrayList<Review> mReview){
+    public ReviewAdapter(Context mContext, ArrayList<Review> mReview) {
         this.mContext = mContext;
         this.mReview = mReview;
     }

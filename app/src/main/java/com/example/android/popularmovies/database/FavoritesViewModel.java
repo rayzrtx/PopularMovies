@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 
 import com.example.android.popularmovies.Movie;
 
-import java.util.ArrayList;
 import java.util.List;
 
 //To provide data to the UI and to survive configuration changes
@@ -26,15 +25,15 @@ public class FavoritesViewModel extends AndroidViewModel {
 
     }
 
-    public LiveData<List<Movie>> loadAllFavorites(){
+    public LiveData<List<Movie>> loadAllFavorites() {
         return mAllFavorites;
     }
 
-    public void insertFavorite(Movie movie){
+    public void insertFavorite(Movie movie) {
         mFavoritesRepository.insertFavorite(movie);
     }
 
-    public void deleteFavoriteById(int id){
+    public void deleteFavoriteById(int id) {
         mFavoritesRepository.deleteFavoriteById(id);
     }
 

@@ -15,7 +15,7 @@ public class MovieReviewJsonUtils {
     private static final String AUTHOR_KEY = "author";
     private static final String CONTENT_KEY = "content";
 
-    public static ArrayList<Review> parseMovieReviewJSON(String movieReviewJson){
+    public static ArrayList<Review> parseMovieReviewJSON(String movieReviewJson) {
 
         ArrayList<Review> reviews = new ArrayList<>();
 
@@ -24,7 +24,7 @@ public class MovieReviewJsonUtils {
 
             JSONArray resultsArray = rootObject.optJSONArray(RESULTS_KEY);
 
-            for (int i = 0; i < resultsArray.length(); i++){
+            for (int i = 0; i < resultsArray.length(); i++) {
                 JSONObject resultsObject = resultsArray.getJSONObject(i);
                 String author = resultsObject.getString(AUTHOR_KEY);
                 String content = resultsObject.getString(CONTENT_KEY);
@@ -34,7 +34,7 @@ public class MovieReviewJsonUtils {
                 reviews.add(newReview);
             }
 
-        }catch (JSONException e){
+        } catch (JSONException e) {
             Log.e("MovieReviewJsonUtils", "Problem parsing the JSON results", e);
             return null;
         }

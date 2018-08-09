@@ -20,11 +20,11 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
     private ArrayList<Trailer> mTrailer;
     private final TrailerItemClickListener mOnClickListener;
 
-    public interface TrailerItemClickListener{
+    public interface TrailerItemClickListener {
         void onTrailerItemClick(int clickedItemIndex);
     }
 
-    public TrailerAdapter (Context mContext, ArrayList<Trailer> mTrailer, TrailerItemClickListener listener){
+    public TrailerAdapter(Context mContext, ArrayList<Trailer> mTrailer, TrailerItemClickListener listener) {
         this.mContext = mContext;
         this.mTrailer = mTrailer;
         mOnClickListener = listener;
@@ -65,7 +65,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
     }
 
     //Setting click listener for each RecyclerView item
-    public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class TrailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView trailerTitleTV;
         ImageView trailerThumbnailIV;
 

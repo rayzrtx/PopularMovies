@@ -5,10 +5,10 @@ public class Review {
     private String movieReviewAuthor;
     private String movieReviewContent;
 
-    public Review(){
+    public Review() {
     }
 
-    public Review(String movieReviewAuthor, String movieReviewContent){
+    public Review(String movieReviewAuthor, String movieReviewContent) {
         this.movieReviewContent = movieReviewContent;
         this.movieReviewAuthor = movieReviewAuthor;
     }

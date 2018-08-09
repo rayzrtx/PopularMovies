@@ -5,10 +5,10 @@ public class Trailer {
     private String movieTrailerKey;
     private String movieTrailerName;
 
-    public Trailer(){
+    public Trailer() {
     }
 
-    public Trailer(String movieTrailerKey, String movieTrailerName){
+    public Trailer(String movieTrailerKey, String movieTrailerName) {
         this.movieTrailerKey = movieTrailerKey;
         this.movieTrailerName = movieTrailerName;
     }

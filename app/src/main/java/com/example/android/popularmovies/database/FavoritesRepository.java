@@ -16,19 +16,19 @@ public class FavoritesRepository {
     private FavoritesDAO mFavoritesDAO;
     private LiveData<List<Movie>> mAllFavorites;
 
-    FavoritesRepository(Application application){
+    FavoritesRepository(Application application) {
         FavoritesDatabase database = FavoritesDatabase.getDatabase(application);
         mFavoritesDAO = database.favoritesDAO();
         mAllFavorites = mFavoritesDAO.loadAllFavorites();
     }
 
     //LiveData runs in background by default
-    LiveData<List<Movie>>loadAllFavorites(){
+    LiveData<List<Movie>> loadAllFavorites() {
         return mAllFavorites;
     }
 
 
-    public void insertFavorite(final Movie favoriteMovie){
+    public void insertFavorite(final Movie favoriteMovie) {
         //Insert must be done on a background thread
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
@@ -38,7 +38,7 @@ public class FavoritesRepository {
         });
     }
 
-    public void deleteFavoriteById(final int id){
+    public void deleteFavoriteById(final int id) {
         //Delete must be done on a background thread
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override

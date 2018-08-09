@@ -11,15 +11,13 @@ public class QueryFavoritesViewModel extends ViewModel {
 
     private LiveData<List<Movie>> favoriteMovie;
 
-    public QueryFavoritesViewModel(FavoritesDatabase database, int favoriteMovieID){
+    public QueryFavoritesViewModel(FavoritesDatabase database, int favoriteMovieID) {
         favoriteMovie = database.favoritesDAO().checkForFavoriteMovie(favoriteMovieID);
     }
 
     public LiveData<List<Movie>> getFavoriteMovie() {
         return favoriteMovie;
     }
-
-
 
 
 }

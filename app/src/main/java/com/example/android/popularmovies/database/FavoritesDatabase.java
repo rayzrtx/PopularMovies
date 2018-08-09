@@ -17,9 +17,9 @@ public abstract class FavoritesDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "favorites_database";
 
     //Make database a singleton to prevent multiple instances of database opened at the same time
-    public static FavoritesDatabase getDatabase(final Context context){
-        if (sInstance == null){
-            synchronized (LOCK){
+    public static FavoritesDatabase getDatabase(final Context context) {
+        if (sInstance == null) {
+            synchronized (LOCK) {
                 Log.d(LOG_TAG, "Creating new DB instance");
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         FavoritesDatabase.class, FavoritesDatabase.DATABASE_NAME)

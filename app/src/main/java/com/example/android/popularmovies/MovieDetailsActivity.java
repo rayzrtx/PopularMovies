@@ -77,7 +77,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     TextView mNoReviewsMessageTV;
 
     ImageView mHeartIcon;
-    FavoritesViewModel mFavoritesViewModel;
     TextView mFavoritesTextView;
     FavoritesDatabase mDatabase;
 
@@ -123,8 +122,6 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
         mDatabase = FavoritesDatabase.getDatabase(getApplicationContext());
 
 
-
-
         //Set up button on action bar if not null
         ActionBar actionBar = this.getSupportActionBar();
         if (actionBar != null) {
@@ -151,10 +148,10 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
             @Override
             public void onClick(View view) {
                 //If Movie is in Favorite database then delete it and update the favorites icon
-                if (isFavoriteMovie()){
+                if (isFavoriteMovie()) {
                     removeFromFavorites();
 
-                }else {
+                } else {
                     addToFavorites();
                 }
             }
@@ -163,14 +160,14 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     }
 
     //Add movie to favorites database
-    private void addToFavorites(){
+    private void addToFavorites() {
         FavoritesViewModel favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         favoritesViewModel.insertFavorite(mMovie);
         Toast.makeText(MovieDetailsActivity.this, "Added to Favorites", Toast.LENGTH_SHORT).show();
     }
 
     //Remove movie from favorites database
-    private void removeFromFavorites(){
+    private void removeFromFavorites() {
         int id = mMovie.getMovieID();
         FavoritesViewModel favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         favoritesViewModel.deleteFavoriteById(id);
@@ -178,36 +175,33 @@ public class MovieDetailsActivity extends AppCompatActivity implements TrailerAd
     }
 
     //If there is at least one movie in Favorites DB with movie ID then movie is a favorite
-    boolean isFavoriteMovie(){
+    boolean isFavoriteMovie() {
         return numberOfMoviesInDB > 0;
     }
 
     //Querying DB by returning List of Movies in Favorites DB with that movie ID
-    private void queryIfFavorite(final Movie favoriteMovie){
-                int id = favoriteMovie.getMovieID();
-                QueryFavoritesViewModelFactory factory = new QueryFavoritesViewModelFactory(mDatabase, id);
-                QueryFavoritesViewModel viewModel = ViewModelProviders.of(MovieDetailsActivity.this, factory).get(QueryFavoritesViewModel.class);
-                //Set observer on the movie to see if it is added as a favorite or removed from favorites and update UI in real time
-                viewModel.getFavoriteMovie().observe(MovieDetailsActivity.this, new Observer<List<Movie>>() {
-                    @Override
-                    public void onChanged(@Nullable List<Movie> movies) {
-                        numberOfMoviesInDB = movies.size();
-                        //If size of List returned is greater than 0, then movie is a favorite so heart icon will be red
-                        if (numberOfMoviesInDB > 0){
-                            mHeartIcon.setImageResource(R.drawable.ic_favorite_red_heart_24dp);
-                            mFavoritesTextView.setText(R.string.remove_from_favorites);
-                        } else {
-                            //Movie is not a favorite so heart will be clear
-                            mHeartIcon.setImageResource(R.drawable.ic_favorite_clear_heart_24dp);
-                            mFavoritesTextView.setText(R.string.add_to_favorites);
-                        }
-                    }
-                });
-
+    private void queryIfFavorite(final Movie favoriteMovie) {
+        int id = favoriteMovie.getMovieID();
+        QueryFavoritesViewModelFactory factory = new QueryFavoritesViewModelFactory(mDatabase, id);
+        QueryFavoritesViewModel viewModel = ViewModelProviders.of(MovieDetailsActivity.this, factory).get(QueryFavoritesViewModel.class);
+        //Set observer on the movie to see if it is added as a favorite or removed from favorites and update UI in real time
+        viewModel.getFavoriteMovie().observe(MovieDetailsActivity.this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movies) {
+                numberOfMoviesInDB = movies.size();
+                //If size of List returned is greater than 0, then movie is a favorite so heart icon will be red
+                if (numberOfMoviesInDB > 0) {
+                    mHeartIcon.setImageResource(R.drawable.ic_favorite_red_heart_24dp);
+                    mFavoritesTextView.setText(R.string.remove_from_favorites);
+                } else {
+                    //Movie is not a favorite so heart will be clear
+                    mHeartIcon.setImageResource(R.drawable.ic_favorite_clear_heart_24dp);
+                    mFavoritesTextView.setText(R.string.add_to_favorites);
+                }
             }
+        });
 
-
-
+    }
 
 
     //This method will populate the various views with the appropriate Movie data
