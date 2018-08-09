@@ -37,9 +37,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieItemClickListener {
 
-    MovieAdapter mAdapter;
-    RecyclerView mMovieList;
-    List<Movie> mMovie;
+    private MovieAdapter mAdapter;
+    private RecyclerView mMovieList;
+    private List<Movie> mMovie;
     TextView mMovieTitle;
     TextView mErrorMessageTextView;
     ProgressBar mProgressBar;
@@ -55,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     String currentMovieSelection;
     SharedPreferences sharedPreferences;
 
+    private static final String SCROLL_POSITION_KEY = "scroll_position";
+    Parcelable mSavedStateGridLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         //Selected menu item
         currentMovieSelection = getMenuSelection();
 
+        //Loading previous layout state
+        if (savedInstanceState != null){
+            mSavedStateGridLayoutManager = savedInstanceState.getParcelable(SCROLL_POSITION_KEY);
+        }
+
+
         //Load proper list depending on which menu item was selected
         switch (currentMovieSelection) {
             case POPULAR:
@@ -93,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 mMovieList.setVisibility(View.VISIBLE);
                 bindDataToRecyclerview();
                 getFavoriteMovies();
+                //Once data has loaded, load state of any previous layouts (including scroll position)
+                if (mSavedStateGridLayoutManager != null){
+                    gridLayoutManager.onRestoreInstanceState(mSavedStateGridLayoutManager);
+                }
         }
 
 
@@ -103,6 +115,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         }
 
+    }
+
+    //Saving state of Grid Layout (including scroll position)
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(SCROLL_POSITION_KEY, gridLayoutManager.onSaveInstanceState());
     }
 
     //Will return the default Most Popular list upon initial load. Otherwise it will return the selected menu item.
@@ -235,6 +254,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
                 //Bind parsed JSON data to recyclerview and use Adapter to populate UI
                 bindDataToRecyclerview();
+                //Once data has loaded, load state of any previous layouts (including scroll position)
+                if (mSavedStateGridLayoutManager != null){
+                    gridLayoutManager.onRestoreInstanceState(mSavedStateGridLayoutManager);
+                }
 
             } else {
                 showErrorMessage();

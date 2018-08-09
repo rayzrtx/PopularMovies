@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieDBJsonUtils {
+public final class MovieDBJsonUtils {
 
     private static final String RESULTS_KEY = "results";
     private static final String TITLE_KEY = "title";
