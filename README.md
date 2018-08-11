@@ -44,5 +44,11 @@ This project combines Part 1 and Part 2 of the Popular Movies project of the Goo
 <p>All movie data retrieved via The Movie Database API</p>
 <p>Various <a href="https://stackoverflow.com/">Stack Overflow</a> posts</p>
 <p><a href="https://www.udacity.com">Udacity</a></p>
-<p float="left"><img src="https://user-images.githubusercontent.com/22454498/43995304-0121448c-9d71-11e8-8e90-dcafff835d82.png" alt="Main Screen screenshot">
+<h2>Screenshots</h2>
+<p align="center"><img src="https://user-images.githubusercontent.com/22454498/43995304-0121448c-9d71-11e8-8e90-dcafff835d82.png" alt="Main Screen screenshot">
 <img src="https://user-images.githubusercontent.com/22454498/43995363-ff01487c-9d71-11e8-84a5-b2527fa9557d.png" alt="Main screen with Menu options visible screenshot"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/22454498/43995362-fef09234-9d71-11e8-9bf3-25a5422ce942.png"></p>
+<p align="center"><img src="https://user-images.githubusercontent.com/22454498/43995361-fede9160-9d71-11e8-8132-44eeef006089.png">
+  <img src="https://user-images.githubusercontent.com/22454498/43995360-feceea62-9d71-11e8-934b-99f823b35bf1.png"></p>
+ <p align="center"><img src="https://user-images.githubusercontent.com/22454498/43995358-feab64a2-9d71-11e8-8ca0-12ad7867380f.png">
+  <img src="https://user-images.githubusercontent.com/22454498/43995359-febc6c2a-9d71-11e8-8b5f-46e256995427.png"></p>
