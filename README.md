@@ -45,3 +45,4 @@ This project combines Part 1 and Part 2 of the Popular Movies project of the Goo
 <p>Various <a href="https://stackoverflow.com/">Stack Overflow</a> posts</p>
 <p><a href="https://www.udacity.com">Udacity</a></p>
 <img src="https://user-images.githubusercontent.com/22454498/43995304-0121448c-9d71-11e8-8e90-dcafff835d82.png" alt="Main Screen screenshot">
+<img src="https://user-images.githubusercontent.com/22454498/43995363-ff01487c-9d71-11e8-84a5-b2527fa9557d.png" alt="Main screen with Menu options visible screenshot">
